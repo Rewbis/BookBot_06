@@ -2,12 +2,11 @@ import json
 from pathlib import Path
 from typing import Dict, Any
 from src.core.state import (
-    ProjectRegistry, Phase1State, Phase2State, Phase3State, 
-    Phase2Chapter, Phase3Chapter, Character, WorldSpecs, PlotSpecs, StyleSpecs
+    ProjectRegistry, WorldEntity, EntityType, WorldBible
 )
 
 class Importer05:
-    """Utility to migrate BookBot_05 legacy logs to BookBot_06 Registry format."""
+    """Utility to migrate BookBot_05 legacy logs to the new Blackboard Registry format."""
 
     @staticmethod
     def load_legacy_log(file_path: str) -> Dict[str, Any]:
@@ -18,86 +17,48 @@ class Importer05:
     def migrate_to_registry(legacy_data: Dict[str, Any]) -> ProjectRegistry:
         data = legacy_data.get('data', {})
         
-        # 1. Metadata
+        # 1. Core Metadata
         plot_legacy = data.get('plot', {})
         style_legacy = data.get('style', {})
         
-        style = StyleSpecs(
-            tone=style_legacy.get('tone', ""),
-            voice=style_legacy.get('voice', ""),
-            vocabulary=style_legacy.get('vocabulary', ""),
-            pov_global=style_legacy.get('pov_global', "Third Person Limited"),
-            tense=style_legacy.get('tense', "Past")
-        )
-        
-        metadata = PlotSpecs(
-            book_title=legacy_data.get('book_title', "Untitled"),
-            premise=plot_legacy.get('goals', ""), # Goals is where the premise often lived
-            goals=plot_legacy.get('goals', ""),
-            conflicts=plot_legacy.get('conflicts', ""),
-            stakes=plot_legacy.get('stakes', ""),
-            style=style
+        registry = ProjectRegistry(
+            title=legacy_data.get('book_title', "Untitled"),
+            premise=plot_legacy.get('goals', ""),
+            tone=style_legacy.get('tone', "Neutral"),
+            voice=style_legacy.get('voice', "")
         )
 
-        registry = ProjectRegistry(metadata=metadata)
-
-        # 2. Phase 1 State
+        # 2. World Bible Entities
         world_legacy = data.get('world', {})
-        world = WorldSpecs(
-            setting=world_legacy.get('setting', ""),
-            history=world_legacy.get('history', ""),
-            rules=world_legacy.get('rules', ""),
-            other=world_legacy.get('other', "")
-        )
+        if world_legacy.get('setting'):
+            registry.world_bible.entities.append(WorldEntity(
+                name="Primary Setting",
+                entity_type=EntityType.LOCATION,
+                description=world_legacy.get('setting', ""),
+                attributes={"history": world_legacy.get('history', ""), "rules": world_legacy.get('rules', "")}
+            ))
         
         chars_legacy = data.get('characters', [])
-        characters = [
-            Character(name=c.get('name', ""), description=c.get('archetype', ""), arc=c.get('notes', ""))
-            for c in chars_legacy
-        ]
-        
-        registry.phase1 = Phase1State(
-            premise=metadata.premise,
-            world=world,
-            characters=characters
-        )
+        for c in chars_legacy:
+            registry.world_bible.entities.append(WorldEntity(
+                name=c.get('name', "Unknown Character"),
+                entity_type=EntityType.CHARACTER,
+                description=c.get('archetype', ""),
+                attributes={"arc": c.get('notes', "")}
+            ))
 
-        # 3. Phase 2 & 3 State (Mapping Chapters)
+        # 3. Chapters
         chapters_legacy = data.get('chapters', [])
-        phase2_chapters = []
-        phase3_chapters = []
-        
         for c in chapters_legacy:
-            # Phase 2: Skeleton (Summary)
-            p2 = Phase2Chapter(
-                chapter_number=c.get('chapter_number', 0),
-                title=c.get('title', "Untitled"),
-                summary=c.get('summary', "")
-            )
-            phase2_chapters.append(p2)
-            
-            # Phase 3: Story (If detailed notes exist)
-            if c.get('scene_notes'):
-                p3 = Phase3Chapter(
-                    chapter_number=c.get('chapter_number', 0),
-                    title=c.get('title', "Untitled"),
-                    story_details=c.get('summary', ""),
-                    scene_beats=c.get('scene_notes', "").split('\n'),
-                    plot_threads=[c.get('plot_thread_a', ""), c.get('plot_thread_b', "")]
-                )
-                phase3_chapters.append(p3)
+            registry.chapters.append({
+                "chapter_number": c.get('chapter_number', 0),
+                "title": c.get('title', "Untitled"),
+                "content": c.get('summary', ""), # Summary becomes the initial content
+                "scene_beats": c.get('scene_notes', "").split('\n') if c.get('scene_notes') else [],
+                "audit_logs": []
+            })
 
-        registry.phase2 = Phase2State(chapters=phase2_chapters)
-        registry.phase3 = Phase3State(chapters=phase3_chapters)
-
-        # Set phase based on progress
-        if phase3_chapters:
-            registry.current_phase = 3
-        elif phase2_chapters:
-            registry.current_phase = 2
-        else:
-            registry.current_phase = 1
-
+        registry.current_phase = "Imported"
         return registry
 
 def run_migration(source_path: str, output_path: str):
@@ -113,9 +74,3 @@ def run_migration(source_path: str, output_path: str):
     except Exception as e:
         print(f"Migration failed: {str(e)}")
         return None
-
-if __name__ == "__main__":
-    # Test migration for A Tricky Tail
-    src = "e:/Coding/BookBot_05/logs/log_A_tricky_tail_20260418_195429.json"
-    dest = "e:/Coding/BookBot_06/logs/migrated_tricky_tail.json"
-    run_migration(src, dest)

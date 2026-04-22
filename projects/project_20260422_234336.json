@@ -1,0 +1,20 @@
+{
+    "project_id": "20260422_234336",
+    "title": "three pigs",
+    "premise": "three brothers leave home and each set up a business. a big bad wolf comes along and is employed one-by-one with each of the brothers a) exploitatively b) respectfully c) cooperatively. hilarity ensues.",
+    "tone": "Neutral",
+    "voice": "",
+    "north_star": "",
+    "world_bible": {
+        "entities": [],
+        "global_rules": [],
+        "history": ""
+    },
+    "conflict_registry": [],
+    "tension_graph": [],
+    "history": [],
+    "agent_memory": {},
+    "chapters": [],
+    "current_phase": "Brainstorming",
+    "last_updated": "2026-04-22T23:51:07.432563"
+}

@@ -1,79 +1,121 @@
 from typing import Dict, Any, List, Optional
 from .llm_client import OllamaClient
-from .state import ProjectRegistry, Phase2Chapter
+from .state import ProjectRegistry, AgentMessage
 
 class BaseAgent:
     def __init__(self, client: OllamaClient):
         self.client = client
 
-    def run(self, **kwargs) -> Any:
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
         raise NotImplementedError
 
-class Brainstormer(BaseAgent):
-    """Agent 01a: Focuses on expanding the premise and world-building."""
+    def run(self, registry: ProjectRegistry, **kwargs) -> Any:
+        raise NotImplementedError
+
+class Architect(BaseAgent):
+    """The Architect: Manages high-level schema and the 'North Star'.
+    
+    Sets the structural boundaries and thematic goals of the story. 
+    Responsible for expanding premises and ensuring all other agents 
+    stay aligned with the core vision.
+    """
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        return (
+            "You are 'The Architect'. Your role is to maintain the structural integrity and thematic 'North Star' of the book. "
+            f"Title: {registry.title}. Tone: {registry.tone}. North Star: {registry.north_star}. "
+            "Respond in JSON format."
+        )
+
     def run(self, registry: ProjectRegistry, prompt: str) -> Dict[str, Any]:
-        system_prompt = "You are Agent 01a 'Brainstormer'. Expand on the user's premise, world, and characters. Respond in JSON."
-        user_content = f"Project: {registry.metadata.book_title}\nCurrent Premise: {registry.phase1.premise}\nUser Input: {prompt}\n\nRequired JSON format:\n{{\"expanded_premise\": \"...\", \"world_details\": \"...\", \"new_characters\": [{{ \"name\": \"...\", \"description\": \"...\" }}]}}"
-        
-        response = self.client.prompt(system_prompt, user_content)
+        """Runs the Architect to expand on a concept or refine structure."""
+        system = self.get_system_prompt(registry)
+        user = f"Context: {registry.premise}\nTask: {prompt}\n\nReturn JSON with 'plan' and 'reasoning'."
+        response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class ContinuityExpert(BaseAgent):
-    """Agent 01b: Checks the premise and world for logical inconsistencies."""
-    def run(self, registry: ProjectRegistry) -> Dict[str, Any]:
-        system_prompt = "You are Agent 01b 'Continuity Expert'. Analyze the project for internal contradictions. Respond in JSON."
-        user_content = (
-            f"Title: {registry.metadata.book_title}\n"
-            f"Premise: {registry.phase1.premise}\n"
-            f"World: {registry.phase1.world.model_dump()}\n"
-            f"Characters: {[c.model_dump() for c in registry.phase1.characters]}\n"
-            "\nIdentify any logical flaws or continuity risks. Required JSON: {\"risks\": [\"...\"], \"suggestions\": [\"...\"]}"
+class DevilsAdvocate(BaseAgent):
+    """The Devil's Advocate: Identifies clichés and forces creative pivots.
+    
+    Acts as an adversarial critic to prevent generic storytelling. 
+    It intentionally looks for tropes and suggests high-impact creative deviations.
+    """
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        return (
+            "You are 'The Devil's Advocate'. You are a contrarian literary critic. Your job is to find clichés, predictable tropes, "
+            "and generic plot points. You must challenge the author to pivot towards more unique and interesting ideas."
         )
-        response = self.client.prompt(system_prompt, user_content)
+
+    def run(self, registry: ProjectRegistry, idea: str) -> Dict[str, Any]:
+        """Analyzes an idea for clichés and returns pivot suggestions."""
+        system = self.get_system_prompt(registry)
+        user = f"Current Idea: {idea}\n\nAnalyze for clichés and suggest a 'Pivot'. Return JSON: {{\"cliches\": [\"...\"], \"pivot_suggestion\": \"...\", \"saturation_score\": 0-100}}"
+        response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class SkeletonPlotter(BaseAgent):
-    """Agent 02a: Generates a high-level 20-chapter skeleton."""
-    def run(self, registry: ProjectRegistry, count: int = 20) -> Dict[str, Any]:
-        system_prompt = f"You are Agent 02a 'Skeleton Plotter'. Design a {count}-chapter high-level skeleton. Respond in JSON."
-        user_content = (
-            f"Title: {registry.metadata.book_title}\n"
-            f"Premise: {registry.phase1.premise}\n"
-            f"World: {registry.phase1.world.setting}\n"
-            "TASK: Generate the skeleton. Each chapter must have exactly 3 to 4 sentences describing the main plot points.\n"
-            "\nRequired JSON format:\n"
-            "{\"chapters\": [{\"chapter_number\": 1, \"title\": \"...\", \"summary\": \"3-4 sentences...\"}]}"
-        )
-        
-        response = self.client.prompt(system_prompt, user_content)
+class Librarian(BaseAgent):
+    """The Librarian: RAG-based lookup and artifact population.
+    
+    Manages the World Bible by creating structured lore entries. 
+    Ensures that new world-building details are logically consistent with existing facts.
+    """
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        return "You are 'The Librarian'. You manage the World Bible. You ensure new facts are recorded and existing lore is retrieved accurately."
+
+    def run(self, registry: ProjectRegistry, query: str, bible_context: str) -> Dict[str, Any]:
+        """Generates new lore entities based on a topic and existing bible context."""
+        system = self.get_system_prompt(registry)
+        user = f"Relevant Lore: {bible_context}\nTask: {query}\n\nIdentify new entities or facts to add to the Bible. Return JSON: {{\"new_entities\": [{{ \"name\": \"...\", \"type\": \"...\", \"description\": \"...\" }}]}}"
+        response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class SkeletonRefiner(BaseAgent):
-    """Agent 02b: Critiques the skeleton for pacing and structure."""
-    def run(self, registry: ProjectRegistry, skeleton_data: Dict[str, Any]) -> Dict[str, Any]:
-        system_prompt = "You are Agent 02b 'Skeleton Refiner'. Critique the chapter skeleton for pacing and structural issues. Respond in JSON."
-        user_content = f"""Skeleton: {skeleton_data}
+class Auditor(BaseAgent):
+    """The Auditor: Logic gap checker and consistency validator.
+    
+    Scans drafts for physical impossibilities, lore contradictions, 
+    and narrative logic gaps.
+    """
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        return "You are 'The Auditor'. You check for logic gaps, physical impossibilities, and continuity errors in the narrative."
 
-Required JSON:
-{{
-  "structural_critique": "...",
-  "pacing_score": 1-10,
-  "improvement_steps": ["..."]
-}}
-"""
-        
-        response = self.client.prompt(system_prompt, user_content)
+    def run(self, registry: ProjectRegistry, draft: str, bible_context: str) -> Dict[str, Any]:
+        """Audits a draft against the World Bible and returns a list of issues."""
+        system = self.get_system_prompt(registry)
+        user = f"World Bible Context: {bible_context}\nDraft to Audit: {draft}\n\nIdentify any logic gaps or contradictions. Return JSON: {{\"issues\": [{{ \"description\": \"...\", \"severity\": \"...\" }}]}}"
+        response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class SkeletonFormatter(BaseAgent):
-    """Agent 02c: Ensures the skeleton is perfectly formatted and consistent."""
-    def run(self, raw_data: Dict[str, Any]) -> List[Phase2Chapter]:
-        # This agent performs deterministic cleaning or simple validation
-        chapters = []
-        for i, c in enumerate(raw_data.get('chapters', [])):
-            chapters.append(Phase2Chapter(
-                chapter_number=c.get('chapter_number', i+1),
-                title=c.get('title', "Untitled"),
-                summary=c.get('summary', "")
-            ))
-        return chapters
+class ActionWriter(BaseAgent):
+    """Pass 1: The Skeleton - Focuses on dry action and movement.
+    
+    Strips away all atmosphere and dialogue to focus purely on 
+    what characters DO and where they GO.
+    """
+    def run(self, registry: ProjectRegistry, beats: str) -> str:
+        """Generates a dry, action-only draft for a scene."""
+        system = "You are 'Action Writer'. Write a dry, plain-language 'Pass 1' draft focusing only on character actions, movement, and plot progression. No flowery prose."
+        user = f"Beats: {beats}\n\nWrite the skeletal action for this scene."
+        return self.client.prompt(system, user)
+
+class SensoryAgent(BaseAgent):
+    """Pass 2: The Sensory - Adds atmosphere, smell, sound, and feeling.
+    
+    Enriches a dry action draft with deep sensory immersion. 
+    Focuses on the 'five senses' and emotional resonance.
+    """
+    def run(self, registry: ProjectRegistry, dry_draft: str) -> str:
+        """Layers sensory details onto a dry action draft."""
+        system = "You are 'Sensory Agent'. Take a dry draft and layer in sensory details: smell, sound, texture, and atmosphere. Enrich the world without changing the action."
+        user = f"Dry Draft: {dry_draft}\n\nLayer in sensory depth."
+        return self.client.prompt(system, user)
+
+class DialogueSpecialist(BaseAgent):
+    """Pass 3: The Dialogue - Refines character voices and unique jargon.
+    
+    Fine-tunes spoken lines to ensure they match character personalities, 
+    social standing, and background.
+    """
+    def run(self, registry: ProjectRegistry, enriched_draft: str) -> str:
+        """Refines dialogue within an enriched draft."""
+        system = "You are 'Dialogue Specialist'. Refine all spoken lines to ensure unique character voices, appropriate jargon, and natural flow. Ensure dialogue matches character personalities."
+        user = f"Enriched Draft: {enriched_draft}\n\nRefine the dialogue."
+        return self.client.prompt(system, user)

@@ -41,6 +41,7 @@ Detailed details can be found in [docs/architecture.md](file:///e:/Coding/BookBo
 - **Dec Decision 02: Multi-Pass Layering**: Prose is never generated in one go. It is "sculpted" through sequential passes (Action -> Sensory -> Voice) to ensure quality and stylistic consistency.
 - **Dec Decision 03: Adversarial Validation**: Every creative output is challenged by a critic (Devil's Advocate, Auditor, or Stylist) before being committed to the registry.
 - **Dec Decision 04: Structured Lore (The Bible)**: Characters, locations, and items are stored as structured entities with tracked attributes to prevent hallucinations.
+- **Dec Decision 05: Logic-First Parsing**: We avoid "prompt-engineering" for data format compliance. We use regex and deterministic Python to extract JSON from LLM noise.
 
 ## 5. Document Navigation
 - [Architecture & Tech Stack](file:///e:/Coding/BookBot_06/docs/architecture.md)
