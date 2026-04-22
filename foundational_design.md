@@ -3,20 +3,23 @@
 A definitive design source for the BookBot Narrative Engine. This document preserves system purpose, architectural decisions, and project boundaries across development sessions.
 
 ## 1. System Purpose
-BookBot_06 is an agentic creative writing partner designed to evolve raw concepts into publishable literary works. It minimizes cognitive load for authors by automating structural plotting, chapter drafting, and revision cycles while maintaining high human curatorial control.
+BookBot_06 is an agentic creative writing partner designed to evolve raw concepts into publishable literary works. It utilizes a **Blackboard Architecture** where a central "World Bible" ensures consistency while specialized agents (adversaries, librarians, and stylists) collaborate to build the narrative.
 
 ## 2. Scope Boundaries (MoSCoW)
 
 ### Must Have
-- **Phase 1-4 Core**: User Input checking, Skeleton generation (3-4 sentence outlines), Story expansion (detailed arcs/beats), and Draft generation.
+- **Blackboard Architecture**: A central "World State" (The Bible) that agents watch and update to ensure consistency.
+- **Lore Engine (RAG)**: Proactive retrieval-augmented generation to prevent "continuity drift" (e.g., eye color shifts, logic gaps).
+- **Adversarial Agents**: Contrarian agents like "The Devil's Advocate" to challenge clichés and force creative pivots.
+- **Multi-Pass Drafting**: A 3-layer drafting process: Action (Bones) -> Sensory (Atmosphere) -> Dialogue (Voice).
+- **Conflict Registry**: Automated detection of logical contradictions in the manuscript.
 - **Local Sovereignty**: All LLM processing hosted locally via **Ollama**.
-- **Deterministic Robustness**: Pythonic cleaning for LLM outputs to prevent parsing failures.
-- **Registry System**: Centralized state management for chapters and plot threads.
+- **Registry System**: Centralized state management with full snapshot save/load functionality.
 
 ### Should Have
-- **Phase 4 Integration**: Automated review, critique, and polishing workflows.
-- **Agent Orchestration**: Modular orchestration using **LangGraph**.
-- **Observability**: Integration with **LangSmith** (optional/local) for prompt refinement.
+- **Emotional Arc Simulation**: Tension Graph calculation to ensure pacing payoffs.
+- **Split-Screen UI**: Real-time "Redline" feedback from critique agents during drafting.
+- **Knowledge Tracker**: "Shadow Agent" that tracks unspoken subtext and character knowledge.
 
 ### Nice to Have
 - **Autonomous Research**: Integration with **Tavily** for world-building fact-checking.
@@ -27,16 +30,17 @@ BookBot_06 is an agentic creative writing partner designed to evolve raw concept
 - **Cloud-Only Hosting**: Strictly avoids reliance on proprietary black-box APIs for core logic.
 
 ## 3. Architecture Summary
-- **UI Layer**: Streamlit-based interactive dashboard.
-- **Logic Layer (Narrative Engine)**: A fleet of 15+ specialized agents orchestrated by LangGraph.
-- **Persistence Layer**: JSON-based state snapshots and Markdown exports.
+- **UI Layer**: Streamlit-based "Sovereign Dashboard" with split-screen drafting and tension graphs.
+- **Logic Layer (Narrative Engine)**: A Blackboard-based fleet of specialized agents orchestrated by LangGraph.
+- **Persistence Layer**: JSON-based full-project snapshots and World Bible registries.
 
 Detailed details can be found in [docs/architecture.md](file:///e:/Coding/BookBot_06/docs/architecture.md).
 
 ## 4. Key Design Decisions (KDD)
-- **Dec Decision 01: Logic-First Parsing**: We avoid "prompt-engineering" for data format compliance. We use regex and deterministic Python to extract JSON from LLM noise.
-- **Dec Decision 02: Phase Decoupling**: The lifecycle is split into 6 distinct phases (Input -> Skeleton -> Story -> Draft -> Manuscript -> Publish). Each phase must operate on a shared state object but remain independent to prevent regressions.
-- **Dec Decision 03: Structural Granularity**: We distinguish between the **Skeleton** (high-level 3-4 sentence plot events) and the **Story** (full-depth scene details, character arcs, and plot threads).
+- **Dec Decision 01: Blackboard-First Orchestration**: We move away from linear 1-6 pipelines. Agents react to changes in the World Bible and Blackboard, allowing for non-linear iteration.
+- **Dec Decision 02: Multi-Pass Layering**: Prose is never generated in one go. It is "sculpted" through sequential passes (Action -> Sensory -> Voice) to ensure quality and stylistic consistency.
+- **Dec Decision 03: Adversarial Validation**: Every creative output is challenged by a critic (Devil's Advocate, Auditor, or Stylist) before being committed to the registry.
+- **Dec Decision 04: Structured Lore (The Bible)**: Characters, locations, and items are stored as structured entities with tracked attributes to prevent hallucinations.
 
 ## 5. Document Navigation
 - [Architecture & Tech Stack](file:///e:/Coding/BookBot_06/docs/architecture.md)

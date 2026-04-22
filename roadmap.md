@@ -16,29 +16,26 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 
 ## Backlog (Prioritized)
 
-### 1. Phase 3: Story Expansion [Must Have]
-- **Task**: Implement Agent 03 (Story Architect) to expand 3-sentence skeletons into detailed scene beats.
-- **UI**: Build the `story_beats_view.py` to allow manual editing of beats before drafting.
-- *Added 2026-04-22. Dependent on: Phase 2 completion.*
+### 1. Blackboard Foundation [Must Have]
+- **Task**: Overhaul `state.py` to support World Bible, Conflict Registry, and Tension Graph.
+- **Task**: Implement `ProjectManager` for full-project snapshots (Save/Load).
+- **UI**: Integrate project selector and snapshot controls into sidebar.
 
-### 2. Phase 4: Prose Drafting [Must Have]
-- **Task**: Implement Agent 04 (Drafting Agent) to convert scene beats into full prose.
-- **Context**: Ensure the agent has access to the Style Specs and previous chapter summaries to maintain continuity.
-- *Added 2026-04-22. Dependent on: Phase 3 completion.*
+### 2. The Lore Engine & Adversaries [Must Have]
+- **Task**: Implement Agent 01c (Devil's Advocate) to challenge clichés in Phase 1.
+- **Task**: Implement Agent 03a (The Librarian) for RAG-based artifact population.
+- **Task**: Implement Agent 03b (The Auditor) for logical gap detection.
 
-### 3. Agent 02b: Skeleton Refinement Loop [Should Have]
-- **Task**: Fully integrate the `SkeletonRefiner` agent into the UI. Currently, it exists in code but isn't triggered in the plotting flow.
-- **Goal**: Allow the user to "Critique" the skeleton and have the AI suggest improvements.
-- *Added 2026-04-22.*
+### 3. Multi-Pass Drafting [Must Have]
+- **Task**: Implement the 3-layer drafting fleet (Action -> Sensory -> Dialogue).
+- **UI**: Build the "Split-Screen" drafting view with real-time Auditor redlines.
 
-### 4. LangGraph Orchestration [Should Have]
-- **Task**: Move from direct agent calls in UI views to a formal LangGraph state machine.
-- **Benefit**: Allows for easier "rewinding" of states and complex conditional loops (e.g., "Refine until user approves").
-- *Added 2026-04-22.*
+### 4. Emotional Arc & Tension [Should Have]
+- **Task**: Implement Tension Graph simulation in the Skeleton Plotter.
+- **UI**: Build the Tension Visualizer chart.
 
-### 5. Multimodal Assets (Phase 5/6) [Nice to Have]
-- **Task**: Add agents for cover art prompt generation and marketing copy.
-- *Added 2026-04-22.*
+### 5. The Shadow Agent [Should Have]
+- **Task**: Implement knowledge tracking to manage subtext and info-dumps.
 
 ---
 
