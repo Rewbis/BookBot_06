@@ -1,0 +1,48 @@
+{
+    "project_id": "20260422_213637",
+    "metadata": {
+        "book_title": "Untitled",
+        "premise": "",
+        "goals": "",
+        "conflicts": "",
+        "stakes": "",
+        "style": {
+            "tone": "",
+            "voice": "",
+            "vocabulary": "",
+            "pov_global": "Third Person Limited",
+            "tense": "Past"
+        }
+    },
+    "phase1": {
+        "premise": "",
+        "world": {
+            "setting": "",
+            "history": "",
+            "rules": "",
+            "other": ""
+        },
+        "characters": [],
+        "completeness_check": null
+    },
+    "phase2": {
+        "chapters": []
+    },
+    "phase3": {
+        "chapters": []
+    },
+    "phase4": {
+        "chapters": []
+    },
+    "phase5": {
+        "final_manuscript": "",
+        "illustration_prompts": {}
+    },
+    "phase6": {
+        "cover_copy": "",
+        "marketing_copy": "",
+        "back_cover_text": ""
+    },
+    "current_phase": 1,
+    "last_updated": "2026-04-22T21:36:37.225381"
+}

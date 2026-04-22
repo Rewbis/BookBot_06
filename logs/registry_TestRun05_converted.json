@@ -1,0 +1,69 @@
+{
+    "project_id": "20260422_214258",
+    "metadata": {
+        "book_title": "TestRun05",
+        "premise": "carly gets love and safety from the new family, but her mouth is diseased again. she wants to hide it and not seem weak, but the pain and swelling is getting worse. she gets taken to the vet and they fix i! then she recovers and lives a long time",
+        "goals": "carly gets love and safety from the new family, but her mouth is diseased again. she wants to hide it and not seem weak, but the pain and swelling is getting worse. she gets taken to the vet and they fix i! then she recovers and lives a long time",
+        "conflicts": "her fear of being outcast or hurt for being weak, but desperately needing help.",
+        "stakes": "her life",
+        "style": {
+            "tone": "Optimistic, endurance",
+            "voice": "first person, carly",
+            "vocabulary": "carly thinks in the language of a tightly focussed low vocabulary predator",
+            "pov_global": "Third Person Limited",
+            "tense": "Past"
+        }
+    },
+    "phase1": {
+        "premise": "carly gets love and safety from the new family, but her mouth is diseased again. she wants to hide it and not seem weak, but the pain and swelling is getting worse. she gets taken to the vet and they fix i! then she recovers and lives a long time",
+        "world": {
+            "setting": "Modern day London, UK\n",
+            "history": "Carly the cat has been kept in Yvonnes deluxe garden cattery for six weeks and seen other cats come and go. Never to return. Now a new family is looking at her, A dad, a mum and an eight year old girl.",
+            "rules": "Normal real world rules, but, cats are anthropomorphised and have an internal monologue.",
+            "other": "cats are anthropomorphised and have an internal monologue."
+        },
+        "characters": [
+            {
+                "name": "Carly the Cat",
+                "description": "survivor",
+                "arc": "black and white british shorthair. on the small side. has recently had her teeth removed since they were terribly diseased. Only three are left. Rumoured to have been found on an industrial estate, by a mechanic who took her in. There is evidence she has been a mother. She is around 3-5 years old. "
+            },
+            {
+                "name": "Freya",
+                "description": "Helpful, caring child",
+                "arc": ""
+            },
+            {
+                "name": "Brian",
+                "description": "Grumpy but loving dad",
+                "arc": "organised the cat adoption to enrich the child and please the mum."
+            },
+            {
+                "name": "Kate",
+                "description": "Loving mum, a bit scatterbrained",
+                "arc": ""
+            }
+        ],
+        "completeness_check": null
+    },
+    "phase2": {
+        "chapters": []
+    },
+    "phase3": {
+        "chapters": []
+    },
+    "phase4": {
+        "chapters": []
+    },
+    "phase5": {
+        "final_manuscript": "",
+        "illustration_prompts": {}
+    },
+    "phase6": {
+        "cover_copy": "",
+        "marketing_copy": "",
+        "back_cover_text": ""
+    },
+    "current_phase": 1,
+    "last_updated": "2026-04-22T21:42:58.444397"
+}
