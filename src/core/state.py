@@ -2,16 +2,47 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any, Union
 from datetime import datetime
 from enum import Enum
+import uuid
 
 class EntityType(str, Enum):
     CHARACTER = "character"
     LOCATION = "location"
     ITEM = "item"
     LORE = "lore"
+    OTHER = "other"
+
+class StyleProfile(BaseModel):
+    """Configuration for the Stylist agent."""
+    sample_texts: List[str] = Field(default_factory=list)
+    style_rules: List[str] = Field(default_factory=list)
+    voice_description: str = "Standard literary prose"
+
+class KnowledgeState(BaseModel):
+    """Tracks what specific characters (or the reader) know."""
+    character_name: str = ""
+    known_facts: List[str] = Field(default_factory=list)
+    suspicions: List[str] = Field(default_factory=list)
+    hidden_secrets: List[str] = Field(default_factory=list)
+
+class ShadowContext(BaseModel):
+    """The 'under-the-hood' state tracked by the Shadow Agent."""
+    character_knowledge: Dict[str, KnowledgeState] = Field(default_factory=dict)
+    active_subtext: List[str] = Field(default_factory=list) # Unspoken tensions/themes
+    dramatic_irony: List[str] = Field(default_factory=list) # Facts reader knows but characters don't
+
+class Chapter(BaseModel):
+    """A single chapter of the manuscript."""
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex)
+    chapter_number: int
+    title: str = "Untitled Chapter"
+    summary: str = ""
+    content: str = ""
+    audit_logs: List[Dict[str, Any]] = Field(default_factory=list)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
 class WorldEntity(BaseModel):
     """A structured entity in the World Bible."""
-    id: str = Field(default_factory=lambda: datetime.now().strftime("%H%M%S%f"))
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex)
     name: str = ""
     entity_type: EntityType = EntityType.LORE
     description: str = ""
@@ -26,7 +57,7 @@ class WorldBible(BaseModel):
 
 class Conflict(BaseModel):
     """A detected contradiction in the story."""
-    id: str = Field(default_factory=lambda: datetime.now().strftime("%H%M%S%f"))
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex)
     description: str = ""
     affected_entities: List[str] = Field(default_factory=list)
     severity: str = "medium" # low, medium, high
@@ -58,8 +89,12 @@ class ProjectRegistry(BaseModel):
     voice: str = ""
     north_star: str = "" # The intended ending or theme
     
+    # Style & Voice
+    style_profile: StyleProfile = Field(default_factory=StyleProfile)
+    
     # The Blackboard
     world_bible: WorldBible = Field(default_factory=WorldBible)
+    shadow_context: ShadowContext = Field(default_factory=ShadowContext)
     conflict_registry: List[Conflict] = Field(default_factory=list)
     tension_graph: List[TensionBeat] = Field(default_factory=list)
     
@@ -68,7 +103,7 @@ class ProjectRegistry(BaseModel):
     agent_memory: Dict[str, str] = Field(default_factory=dict) # Transient internal monologues
     
     # Production Data (Manuscript)
-    chapters: List[Dict[str, Any]] = Field(default_factory=list) # Flexible chapter structure
+    chapters: List[Chapter] = Field(default_factory=list) # Structured chapters
     
     # Metadata
     current_phase: str = "Brainstorming"
@@ -92,8 +127,7 @@ class ProjectRegistry(BaseModel):
         counts = {
             "World Bible": count_tokens(str(self.world_bible.model_dump())),
             "History": count_tokens(" ".join([m.content for m in self.history])),
-            "Chapters": count_tokens(str(self.chapters)),
-            "Total": 0
+            "Chapters": count_tokens(str([c.model_dump() for c in self.chapters])),
         }
         counts["Total"] = sum(counts.values())
         return counts

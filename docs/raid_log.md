@@ -9,7 +9,7 @@ This document tracks Risks, Assumptions, Issues, and Dependencies to ensure proj
 | R02 | Local LLM bottlenecks. | Medium | Optimize prompts and use smaller models for utility tasks. | Active |
 | R03 | LLM JSON parsing failures. | High | Use deterministic Python-based extraction instead of prompt escalation. | Active |
 | R04 | Orchestration complexity (15+ agents). | Medium | Use LangGraph for structured state transitions and clear agent handoffs. | New |
-| R05 | Consistency drift across 6 phases. | High | Implement "Continuity Expert" agent (Agent 01b) and enforce context history rules. | New |
+| R05 | Consistency drift across 6 phases. | High | Implement "Continuity Expert" agent (Agent 04a) and enforce context history rules. | New |
 
 ## 2. Assumptions (A)
 | ID | Description | Validation | Status |

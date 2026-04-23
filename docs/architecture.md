@@ -24,27 +24,40 @@ graph TD
     Orchestrator <--> Bible
     
     subgraph "Collaborative Fleet"
-        Agent_DA[Devil's Advocate]
-        Agent_Lib[Librarian]
-        Agent_Aud[Auditor]
-        Agent_Sty[Stylist]
-        Agent_Arch[Architect]
-        Agent_Sha[Shadow Agent]
+        subgraph "Phase 1: Brainstorming"
+            Agent_Arch[Architect]
+            Agent_DA[Devil's Advocate]
+        end
         
-        subgraph "Multi-Pass Drafting"
+        subgraph "Phase 2 & 3: Structure & Lore"
+            Agent_Skel[Skeleton Plotter]
+            Agent_Lib[Librarian]
+        end
+        
+        subgraph "Phase 4: Drafting (4-Pass)"
+            Agent_Cont[Continuity Expert]
             Pass1[Action Agent]
             Pass2[Sensory Agent]
             Pass3[Dialogue Specialist]
+            Pass4[Stylist Agent]
+        end
+
+        subgraph "Phase 5: Polishing"
+            Agent_Aud[Auditor]
+            Agent_Sha[Shadow Agent]
         end
     end
     
+    Orchestrator --- Agent_Arch
     Orchestrator --- Agent_DA
     Orchestrator --- Agent_Lib
-    Orchestrator --- Agent_Aud
-    Orchestrator --- Agent_Sty
+    Orchestrator --- Agent_Cont
     Orchestrator --- Pass1
     Orchestrator --- Pass2
     Orchestrator --- Pass3
+    Orchestrator --- Pass4
+    Orchestrator --- Agent_Aud
+    Orchestrator --- Agent_Sha
     
     subgraph "Infrastructure"
         Collaborative_Fleet --> LocalLLM{{Local Ollama}}
@@ -57,8 +70,10 @@ graph TD
 ### UI Layer (Sovereign Dashboard)
 A responsive dashboard providing views for different facets of creation:
 - **World Bible Tab**: Full management of characters, locations, and items.
+- **Style & Voice**: Configuration for tone, stylistic rules, and reference samples.
 - **Tension Visualizer**: Interactive chart showing emotional pacing.
-- **Split-Screen Drafting**: AI multi-pass drafting on the left, adversarial redlines on the right.
+- **Split-Screen Drafting**: AI multi-pass drafting on the left, adversarial redlines and shadow context on the right.
+- **Audit Log**: Conflict registry and real-time session telemetry.
 - **Project Selector**: Sidebar for managing snapshots and iterations.
 
 ### Orchestration Layer (LangGraph)
@@ -68,14 +83,23 @@ Manages the "Blackboard." It ensures that:
 - Conflict warnings are surfaced to the user.
 
 ### Agent Layer (The Fleet)
-A non-linear fleet of specialized personas:
-- **The Architect**: Manages high-level schema and plot "North Star."
-- **The Librarian**: RAG-based lookup; populates the world with meaningful artifacts.
-- **The Devil's Advocate**: Contrarian that challenges clichés and forces creative pivots.
-- **The Auditor**: Logic gap checker (e.g., "How did he get to the tower if the tide was in?").
-- **The Stylist**: Enforces tone and "voice" constraints (e.g., "Melancholic").
-- **The Shadow Agent**: Tracks unspoken subtext and character knowledge states.
-- **Drafting Fleet**: Sequential agents (Action -> Sensory -> Dialogue) for iterative sculpting.
+A non-linear fleet of specialized personas organized by creation phase:
+
+- **Phase 1: Brainstorming**
+    - **The Architect**: Manages high-level schema and plot "North Star."
+    - **The Devil's Advocate**: Contrarian that challenges clichés and forces creative pivots.
+- **Phase 2: Structuring**
+    - **The Skeleton Plotter**: Generates chapter beats and tension arcs.
+- **Phase 3: World Building**
+    - **The Librarian**: RAG-based lookup; populates the world with meaningful artifacts.
+- **Phase 4: Drafting (4-Pass Fleet)**
+    - **The Continuity Expert**: (Pass 0) Validates scene beats against the Bible before drafting.
+    - **Drafting Agents**: Sequential sculpting (Action -> Sensory -> Dialogue -> Style).
+- **Phase 5: Polishing & Audit**
+    - **The Auditor**: Logic gap checker (e.g., "How did he get to the tower if the tide was in?").
+    - **The Shadow Agent**: Tracks unspoken subtext and character knowledge states.
+- **Phase 6: Export & Marketing**
+    - **Marketing Agent**: (Planned) Generates blurbs, meta-data, and query letters.
 
 ### Robustness Layer (Deterministic Logic)
 The "Pythonic-First" component that protects the system from LLM non-determinism. It performs:

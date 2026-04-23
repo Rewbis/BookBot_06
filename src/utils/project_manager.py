@@ -36,11 +36,18 @@ class ProjectManager:
         """Loads a project registry from a JSON file."""
         file_path = self.projects_dir / f"project_{project_id}.json"
         if not file_path.exists():
-            # Try searching by ID if the filename doesn't match exactly
+            # Try searching for a file that actually has the project_id inside
             for p in self.projects_dir.glob("*.json"):
-                if project_id in p.name:
-                    file_path = p
-                    break
+                if p.suffix == ".tmp": continue
+                try:
+                    with open(p, 'r') as f:
+                        # Just check first 1KB for the ID
+                        chunk = f.read(1024)
+                        if f'"project_id": "{project_id}"' in chunk:
+                            file_path = p
+                            break
+                except:
+                    continue
         
         if file_path.exists():
             with open(file_path, 'r') as f:
@@ -53,10 +60,12 @@ class ProjectManager:
         registry.last_updated = datetime.now()
         file_name = f"project_{registry.project_id}.json"
         file_path = self.projects_dir / file_name
+        temp_path = file_path.with_suffix(".tmp")
         
-        with open(file_path, 'w') as f:
+        with open(temp_path, 'w') as f:
             json.dump(registry.model_dump(mode='json'), f, indent=4)
         
+        os.replace(temp_path, file_path)
         return str(file_path)
 
     def create_new_project(self, title: str = "Untitled Project") -> ProjectRegistry:

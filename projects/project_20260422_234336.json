@@ -5,16 +5,76 @@
     "tone": "Neutral",
     "voice": "",
     "north_star": "",
+    "style_profile": {
+        "sample_texts": [
+            "Mrs Pig was very tired: 'Oh dear,' she said to her three little pigs, 'I can\u2019t do this work anymore, I\u2019m afraid you must leave home and make your own way in the world.' So the three little pigs set off.\n\nThe first little pig met a man carrying a bundle of straw.\n\n'Excuse me,' said the first little pig politely. 'Would you please sell some of your straw so I can make a house?'\n\nThe man readily agreed and the first little pig went off to find a good place to build his house."
+        ],
+        "style_rules": [
+            "Primary school vocabulary levels."
+        ],
+        "voice_description": "A traditional fairy tale framing, with a modern twist."
+    },
     "world_bible": {
-        "entities": [],
+        "entities": [
+            {
+                "id": "1198eb26ba694424b8f21f7892dff295",
+                "name": "Bill",
+                "entity_type": "lore",
+                "description": "One of three brothers known as Bill, Ben, and Bambam. Their origins and specific roles are undocumented in existing lore.",
+                "attributes": {},
+                "last_updated": "2026-04-23T20:02:02.164991"
+            },
+            {
+                "id": "8666b9fba0174576a0d2c16e1229630a",
+                "name": "Ben",
+                "entity_type": "lore",
+                "description": "One of three brothers known as Bill, Ben, and Bambam. Their origins and specific roles are undocumented in existing lore.",
+                "attributes": {},
+                "last_updated": "2026-04-23T20:02:02.165007"
+            },
+            {
+                "id": "a4c42b6fd6294a7dbd75908dae23f202",
+                "name": "Bambam",
+                "entity_type": "lore",
+                "description": "One of three brothers known as Bill, Ben, and Bambam. Their origins and specific roles are undocumented in existing lore.",
+                "attributes": {},
+                "last_updated": "2026-04-23T20:02:02.165015"
+            },
+            {
+                "id": "f350515fe5294ef6b20c9d93b2815f4c",
+                "name": "The Wolf",
+                "entity_type": "lore",
+                "description": "A mysterious figure or creature connected to the brothers Bill, Ben, and Bambam, though the nature of this connection remains undocumented in existing lore.",
+                "attributes": {},
+                "last_updated": "2026-04-23T20:02:24.786595"
+            }
+        ],
         "global_rules": [],
         "history": ""
     },
+    "shadow_context": {
+        "character_knowledge": {},
+        "active_subtext": [],
+        "dramatic_irony": []
+    },
     "conflict_registry": [],
     "tension_graph": [],
-    "history": [],
+    "history": [
+        {
+            "sender": "Architect",
+            "content": "[{'section': 'Business Models', 'details': \"Expand each brother's business to reflect their approach: 1) A fast-food chain with exploitative labor practices (e.g., underpaying workers, unsafe conditions), 2) A boutique consulting firm with respectful, ethical hiring, 3) A cooperative farm where everyone shares profits and responsibilities.\"}, {'section': \"Wolf's Transformation\", 'details': \"Develop the wolf's character arc: Initially a 'villain,' he evolves based on his treatment. In the exploitative scenario, he becomes resentful and sabotages the business. In the respectful scenario, he becomes a loyal employee with hidden skills (e.g., strategic thinking). In the cooperative scenario, he becomes an innovator who helps the brother revolutionize the industry.\"}, {'section': 'Hilarious Consequences', 'details': \"Add absurd outcomes: The exploitative brother's restaurant collapses when the wolf quits and starts a union. The respectful brother's firm thrives but faces chaos when the wolf's 'strategic thinking' leads to overcomplicated plans. The cooperative brother's farm becomes a viral sensation due to the wolf's unconventional marketing ideas.\"}, {'section': 'Thematic Layers', 'details': \"Introduce subplots: The brothers' relationship dynamics (e.g., rivalry, jealousy), the wolf's backstory (e.g., he was once a successful entrepreneur who failed due to unethical practices), and a parallel story about the community's reaction to each business model.\"}]",
+            "timestamp": "2026-04-23T16:10:16.879405",
+            "metadata": {}
+        },
+        {
+            "sender": "Devil's Advocate",
+            "content": "Subvert the wolf's role by making him a manipulative observer rather than a passive participant in the brothers' fates. Instead of clear-cut 'good vs. evil' outcomes, let each business model inadvertently expose systemic flaws in their respective industries (e.g., the cooperative farm fails due to unrealistic utopianism, not just external factors). Introduce a fourth brother who embodies a hybrid model (e.g., a tech-driven agribusiness) to force the wolf into morally ambiguous choices. Tie the wolf's backstory to a corporate espionage plot rather than a simple 'fallen entrepreneur' arc.",
+            "timestamp": "2026-04-23T16:10:16.879415",
+            "metadata": {}
+        }
+    ],
     "agent_memory": {},
     "chapters": [],
     "current_phase": "Brainstorming",
-    "last_updated": "2026-04-22T23:51:07.432563"
+    "last_updated": "2026-04-23T20:04:41.982305"
 }

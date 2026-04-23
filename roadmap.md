@@ -6,11 +6,12 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 **The Goal**: Empower a solo author to move from "Spark to Manuscript" in a weekend.
 
 1. **Spark**: The author enters a premise ("A lighthouse keeper discovers the light is powered by captured memories").
-2. **Expansion**: The **Brainstormer** and **Continuity Expert** suggest the lighthouse is actually a prison for forgotten gods.
-3. **Skeleton**: The **Skeleton Plotter** generates 20 chapters, ensuring the mystery unravels at the right pace.
-4. **Story Beats**: The author refines Chapter 5, adding a specific twist about the keeper's own lost memories.
-5. **Drafting**: The **Drafting Agent** generates 1,500 words for Chapter 1, using a "Melancholic, Sea-Salted" tone.
-6. **Polish**: The author reviews the full manuscript, exports it to Markdown, and uses the **Marketing Agent** to write the back-cover blurb.
+2. **Phase 1 (Brainstorming)**: The **Brainstormer** and **Devil's Advocate** debate the premise, suggesting the lighthouse is actually a prison for forgotten gods.
+3. **Phase 2 (Structuring)**: The **Skeleton Plotter** generates 20 chapters, ensuring the mystery unravels at the right pace.
+4. **Phase 3 (World Building)**: The **Librarian** populates the "World Bible" with character details and lore artifacts.
+5. **Phase 4 (Drafting)**: The **Drafting Fleet** generates prose using the 4-pass system (Action -> Sensory -> Dialogue -> Style).
+6. **Phase 5 (Audit & Polish)**: The **Auditor** flags consistency gaps and the **Shadow Agent** tracks unspoken subtext.
+7. **Phase 6 (Export)**: The author reviews the full manuscript and exports it to Markdown.
 
 ---
 
@@ -24,18 +25,13 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 ### 2. The Lore Engine & Adversaries [Must Have]
 - **Task**: Implement Agent 01c (Devil's Advocate) to challenge clichés in Phase 1.
 - **Task**: Implement Agent 03a (The Librarian) for RAG-based artifact population.
-- **Task**: Implement Agent 03b (The Auditor) for logical gap detection.
-
-### 3. Multi-Pass Drafting [Must Have]
-- **Task**: Implement the 3-layer drafting fleet (Action -> Sensory -> Dialogue).
-- **UI**: Build the "Split-Screen" drafting view with real-time Auditor redlines.
-
-### 4. Emotional Arc & Tension [Should Have]
+### 3. Emotional Arc & Tension [Should Have]
 - **Task**: Implement Tension Graph simulation in the Skeleton Plotter.
 - **UI**: Build the Tension Visualizer chart.
 
-### 5. The Shadow Agent [Should Have]
-- **Task**: Implement knowledge tracking to manage subtext and info-dumps.
+### 4. Auto-Save Enhancements
+- **UI**: Added "Save Required" visual indicators to the sidebar.
+- **Task**: Integrated automatic 'last_updated' tracking in the ProjectRegistry.
 
 ---
 
@@ -48,10 +44,20 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 - **Task**: Created 6-tab Streamlit UI with Dark Mode.
 - **Date completed**: 2026-04-22.
 
-### Sticky Header UI
-- **Task**: Frozen the title and tab selector to improve navigation during long scrolls.
+### Legacy Migration & UI Fixes
+- **Task**: Built `Importer05` utility to bring forward logs from previous versions.
+- **Task**: Froze the title and tab selector to improve navigation during long scrolls.
 - **Date completed**: 2026-04-22.
 
-### Legacy Migration (BB05 -> BB06)
-- **Task**: Built `Importer05` utility to bring forward logs from previous versions.
-- **Date completed**: 2026-04-22.
+### 4-Pass Drafting & Shadow Engine
+- **Task**: Implemented the 4-layer drafting fleet (Action -> Sensory -> Dialogue -> Style).
+- **Task**: Implemented Agent 04a (Continuity Expert) as pre-draft validator.
+- **Task**: Implemented Agent 05a (The Auditor) for logic gap detection.
+- **Task**: Implemented Agent 05b (The Shadow Agent) for subtext and knowledge tracking.
+- **UI**: Built the "Split-Screen" drafting view with real-time Auditor redlines and Shadow Context visibility.
+### Editability & Plotting Refinements
+- **Task**: Implemented `SkeletonPlotter` (Agent 02a) and `SkeletonFormatter` (Agent 02c).
+- **UI**: Integrated Skeleton Plotter UI and editability into Architectural Planning tab.
+- **UI**: Enabled direct editing for World Bible entities and Tension beats.
+- **UI**: Added "Save Required" indicator to sidebar.
+- **Date completed**: 2026-04-23.
