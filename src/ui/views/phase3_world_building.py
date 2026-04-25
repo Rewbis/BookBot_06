@@ -8,12 +8,12 @@ def render_phase3():
     
     manager = st.session_state.world_manager
     
-    # --- Lore Architect ---
-    st.subheader("🖋️ Lore Architect", help="Ask the Librarian to brainstorm and create structured lore for you.")
+    # --- 03a_librarian ---
+    st.subheader("🖋️ 03a_librarian", help="Ask the Librarian to brainstorm and create structured lore for you.")
     lore_topic = st.text_input("Topic to expand (e.g. 'Magic System')", placeholder="Enter a concept to flesh out...")
     if st.button("✨ Brainstorm & Add to Bible"):
         if lore_topic:
-            with st.status(f"Orchestrator: Librarian researching {lore_topic}...", expanded=True) as status:
+            with st.status(f"Orchestrator: 03a_librarian researching {lore_topic}...", expanded=True) as status:
                 run_orchestrator("librarian", {"topic": lore_topic})
                 status.update(label="Lore Generation Complete!", state="complete")
                 st.rerun()

@@ -3,65 +3,43 @@
 This document outlines the high-level architecture and component interactions of the BookBot Narrative Engine.
 
 ## 1. System Overview
-BookBot_06 follows a **Blackboard Architecture** where **LangGraph** serves as the orchestrator, managing a shared "World Bible" and "Blackboard" that specialized agents collaborate on asynchronously.
+BookBot_06 follows a **Phased Pipeline with Shared State**. The system progresses through 6 distinct phases (Planning to Publication). While the overall structure is linear, agents can be revisited and re-run as needed.
 
 ## 2. Component Diagram
-The following diagram visualizes the collaborative nature of the Blackboard model.
+The following diagram visualizes the phased pipeline and shared state model.
 
 ```mermaid
 graph TD
     User((Author)) -->|Interacts| UI[Sovereign Dashboard]
     UI -->|Action| Orchestrator[LangGraph Orchestrator]
     
-    subgraph "The Blackboard (Shared State)"
+    subgraph "Shared Project State"
         Registry[(Project Snapshot)]
         Bible[(World Bible RAG)]
-        Graph[(Tension Graph)]
-        Messages[(Agent Debates)]
+        Messages[(Agent History/Logs)]
     end
     
     Orchestrator <--> Registry
     Orchestrator <--> Bible
     
-    subgraph "Collaborative Fleet"
-        subgraph "Phase 1: Brainstorming"
-            Agent_Arch[Architect]
-            Agent_DA[Devil's Advocate]
-        end
-        
-        subgraph "Phase 2 & 3: Structure & Lore"
-            Agent_Skel[Skeleton Plotter]
-            Agent_Lib[Librarian]
-        end
-        
-        subgraph "Phase 4: Drafting (4-Pass)"
-            Agent_Cont[Continuity Expert]
-            Pass1[Action Agent]
-            Pass2[Sensory Agent]
-            Pass3[Dialogue Specialist]
-            Pass4[Stylist Agent]
-        end
-
-        subgraph "Phase 5: Polishing"
-            Agent_Aud[Auditor]
-            Agent_Sha[Shadow Agent]
-        end
+    subgraph "The Phased Fleet"
+        P1[Phase 1: 01a_architect, 01b_devils_advocate]
+        P2[Phase 2: 02a_skeleton_plotter, 02b_skeleton_formatter]
+        P3[Phase 3: 03a_librarian]
+        P4[Phase 4: 04ab_continuity_action, 04cd_sensory_dialogue, 04e_stylist]
+        P5[Phase 5: 05ab_audit_shadow]
+        P6[Phase 6: 06a_marketing_agent]
     end
     
-    Orchestrator --- Agent_Arch
-    Orchestrator --- Agent_DA
-    Orchestrator --- Agent_Lib
-    Orchestrator --- Agent_Cont
-    Orchestrator --- Pass1
-    Orchestrator --- Pass2
-    Orchestrator --- Pass3
-    Orchestrator --- Pass4
-    Orchestrator --- Agent_Aud
-    Orchestrator --- Agent_Sha
+    Orchestrator --- P1
+    Orchestrator --- P2
+    Orchestrator --- P3
+    Orchestrator --- P4
+    Orchestrator --- P5
+    Orchestrator --- P6
     
     subgraph "Infrastructure"
-        Collaborative_Fleet --> LocalLLM{{Local Ollama}}
-        Agent_Lib -.-> VectorDB[(FAISS / Chroma)]
+        P1 & P2 & P3 & P4 & P5 & P6 --> LocalLLM{{Local Ollama}}
     end
 ```
 
@@ -71,35 +49,35 @@ graph TD
 A responsive dashboard providing views for different facets of creation:
 - **World Bible Tab**: Full management of characters, locations, and items.
 - **Style & Voice**: Configuration for tone, stylistic rules, and reference samples.
-- **Tension Visualizer**: Interactive chart showing emotional pacing.
 - **Split-Screen Drafting**: AI multi-pass drafting on the left, adversarial redlines and shadow context on the right.
 - **Audit Log**: Conflict registry and real-time session telemetry.
 - **Project Selector**: Sidebar for managing snapshots and iterations.
 
 ### Orchestration Layer (LangGraph)
-Manages the "Blackboard." It ensures that:
-- Agents are triggered based on state changes (e.g., if a new character is added, the Librarian updates the Bible).
-- Multi-pass loops for drafting are executed in sequence.
-- Conflict warnings are surfaced to the user.
+Manages the phased execution and agent transitions. It ensures that:
+- The project state is propagated correctly between phases.
+- Multi-pass loops for drafting (Phase 4) are executed in sequence.
+- Continuity is maintained via the shared World Bible.
 
 ### Agent Layer (The Fleet)
 A non-linear fleet of specialized personas organized by creation phase:
 
 - **Phase 1: Brainstorming**
-    - **The Architect**: Manages high-level schema and plot "North Star."
-    - **The Devil's Advocate**: Contrarian that challenges clichés and forces creative pivots.
+    - **01a_architect**: Manages high-level schema and plot "North Star."
+    - **01b_devils_advocate**: Contrarian that challenges clichés and forces creative pivots.
 - **Phase 2: Structuring**
-    - **The Skeleton Plotter**: Generates chapter beats and tension arcs.
+    - **02a_skeleton_plotter**: Generates chapter beats and narrative structure.
+    - **02b_skeleton_formatter**: Ensures plot output matches registry schema.
 - **Phase 3: World Building**
-    - **The Librarian**: RAG-based lookup; populates the world with meaningful artifacts.
-- **Phase 4: Drafting (4-Pass Fleet)**
-    - **The Continuity Expert**: (Pass 0) Validates scene beats against the Bible before drafting.
-    - **Drafting Agents**: Sequential sculpting (Action -> Sensory -> Dialogue -> Style).
-- **Phase 5: Polishing & Audit**
-    - **The Auditor**: Logic gap checker (e.g., "How did he get to the tower if the tide was in?").
-    - **The Shadow Agent**: Tracks unspoken subtext and character knowledge states.
-- **Phase 6: Export & Marketing**
-    - **Marketing Agent**: (Planned) Generates blurbs, meta-data, and query letters.
+    - **03a_librarian**: RAG-based lookup; populates the world with meaningful artifacts.
+- **Phase 4: Drafting (3-Step Fleet)**
+    - **04ab_continuity_action**: Combined continuity check and skeletal drafting.
+    - **04cd_sensory_dialogue**: Atmospheric layering and vocal refinement.
+    - **04e_stylist**: Final stylistic enforcement.
+- **Phase 5: Audit & Shadow**
+    - **05ab_audit_shadow**: Logic gap checker and subtext tracker.
+- **Phase 6: Export & Marketing (Implemented - Untested)**
+    - **06a_marketing_agent**: Generates blurbs, meta-data, and query letters.
 
 ### Robustness Layer (Deterministic Logic)
 The "Pythonic-First" component that protects the system from LLM non-determinism. It performs:

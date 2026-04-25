@@ -6,7 +6,7 @@ from src.core.state import (
 )
 
 class Importer05:
-    """Utility to migrate BookBot_05 legacy logs to the new Blackboard Registry format."""
+    """Utility to migrate BookBot_05 legacy logs to the new Narrative Registry format."""
 
     @staticmethod
     def load_legacy_log(file_path: str) -> Dict[str, Any]:

@@ -1,0 +1,103 @@
+{
+    "project_id": "20260425_165804",
+    "title": "Three pigs",
+    "premise": "Classic fairy tale the three little pigs, reimagined. Three anthropomorphic pig brothers leave home and set up businesses. An anthropomorphic wolf works for them each in turn, ruining the first two businesses but bringing great success to the third. First brother: Bart, farmer, expects wolf to sleep in the barn and work long hours for slop - \"it's what pigs like!\" Wolf abandons the farmer right before harvest, leaving the grain to rot in the fields. Second brother: Ben, lumber merchant, provides wolf with a standard house and decent pay, but ignores wolf's warning about killing beavers to stop them gnawing on trees. The beavers rise up and campaign for beaver rights, indigenous land ownership and take back the forests. ",
+    "tone": "Whimsical",
+    "voice": "",
+    "north_star": "",
+    "final_vision": "Classic fairy tale the three little pigs, reimagined. Three anthropomorphic pig brothers leave home and set up businesses. An anthropomorphic wolf works for them each in turn, ruining the first two businesses but bringing great success to the third. First brother: Bart, farmer, expects wolf to sleep in the barn and work long hours for slop - \"it's what pigs like!\" Wolf abandons the farmer right before harvest, leaving the grain to rot in the fields. Second brother: Ben, lumber merchant, provides wolf with a standard house and decent pay, but ignores wolf's warning about killing beavers to stop them gnawing on trees. The beavers rise up and campaign for beaver rights, indigenous land ownership and take back the forests. ",
+    "target_chapters": 5,
+    "target_word_count": 5000,
+    "style_profile": {
+        "sample_texts": [],
+        "style_rules": [],
+        "voice_description": "Standard literary prose"
+    },
+    "world_bible": {
+        "entities": [],
+        "global_rules": [],
+        "history": ""
+    },
+    "shadow_context": {
+        "character_knowledge": {},
+        "active_subtext": [],
+        "dramatic_irony": []
+    },
+    "conflict_registry": [],
+    "history": [
+        {
+            "sender": "01a_architect",
+            "content": "{'third_brother': 'Clyde, an eco-conscious entrepreneur who builds a sustainable business model using renewable resources and collaborates with the wolf to create a symbiotic relationship with the beavers.', 'wolf_role': 'The wolf, after sabotaging the first two businesses, becomes a strategic advisor to Clyde, leveraging his knowledge of the forest ecosystem to resolve the beaver conflict through negotiation and innovation.', 'resolution': \"Clyde's business thrives by integrating beaver dam-building into his land management plan, turning the beavers into partners rather than pests, while the wolf gains a reputation as a problem-solver.\"}",
+            "timestamp": "2026-04-25T17:31:55.641592",
+            "metadata": {}
+        },
+        {
+            "sender": "01b_devils_advocate",
+            "content": "Reframe the wolf as a morally ambiguous figure with a hidden agenda tied to the forest's dying ecosystem. Instead of Clyde 'integrating' beavers, force a confrontation where the beavers' dam-building accidentally triggers a geological catastrophe. The wolf could secretly sabotage Clyde's business to prevent human exploitation of the land, creating a tripartite conflict where all parties must confront their own ethical failures. The resolution could involve Clyde destroying his business to save the forest, subverting the 'eco-success' trope.",
+            "timestamp": "2026-04-25T17:31:55.641603",
+            "metadata": {
+                "cliches": [
+                    "The eco-conscious entrepreneur trope is overused in modern fiction, often serving as a 'feel-good' stand-in for innovation without meaningful conflict.",
+                    "The wolf as a trickster-turned-mentor follows a well-worn path in fables and animal allegories, lacking psychological depth.",
+                    "The 'symbiotic relationship with nature' resolution is a predictable outcome in eco-thrillers, avoiding genuine tension between human ambition and ecological reality.",
+                    "The beaver-as-pest narrative reinforces outdated 'man vs. nature' binaries, ignoring the complexity of coexistence."
+                ],
+                "pivot_suggestion": "Reframe the wolf as a morally ambiguous figure with a hidden agenda tied to the forest's dying ecosystem. Instead of Clyde 'integrating' beavers, force a confrontation where the beavers' dam-building accidentally triggers a geological catastrophe. The wolf could secretly sabotage Clyde's business to prevent human exploitation of the land, creating a tripartite conflict where all parties must confront their own ethical failures. The resolution could involve Clyde destroying his business to save the forest, subverting the 'eco-success' trope.",
+                "saturation_score": 82
+            }
+        },
+        {
+            "sender": "01a_architect",
+            "content": "{'third_brother': 'Clyde, an idealistic eco-entrepreneur who builds a regenerative permaculture farm, unaware that the wolf has been manipulating events to protect the forest from human encroachment. His business model relies on beaver-assisted wetland restoration, but the wolf secretly sabotages his irrigation systems to force a reckoning.', 'wolf_role': \"The wolf is revealed to be a former guardian of the forest, cursed to walk the line between predator and protector. He orchestrated the first two failures to prevent human exploitation but now sees Clyde's project as a false solution\u2014his sabotage of Clyde's hydroponic systems triggers a landslide, exposing the fragility of coexistence.\", 'resolution': \"Clyde, realizing the wolf's true motives and the beavers' unintended ecological disruption, burns his farm to halt further damage. The wolf vanishes into the forest, leaving behind a single acorn as a symbol of cyclical renewal. The beavers, now exiled, rebuild their dams in a distant valley, their legacy of destruction and creation unresolved.\"}",
+            "timestamp": "2026-04-25T17:31:55.641614",
+            "metadata": {}
+        },
+        {
+            "sender": "02a_skeleton_plotter",
+            "content": "Generated 5 chapter beats.",
+            "timestamp": "2026-04-25T17:37:18.765776",
+            "metadata": {}
+        }
+    ],
+    "agent_memory": {},
+    "chapters": [
+        {
+            "id": "c0d47fd3f1364532b047e7cb75153494",
+            "chapter_number": 1,
+            "title": "The Departure and the Wolf's Arrival",
+            "summary": "The three anthropomorphised pig brothers, Bart, Ben, and Bill, leave their father's home to establish their own lives. Bart, the eldest, opens a farm and hires a destitute but intelligent wolf as a labourer. The wolf, however, does not appreciate being made to sleep in the barn and being offered slop for food. Bart dismisses the wolf's pickiness, believing food good enough for pigs is good enough for wolves. Meanwhile, the wolf secretly looks around for alternative employment.",
+            "content": "",
+            "audit_logs": [],
+            "metadata": {}
+        },
+        {
+            "id": "13639d4959f34cb6b8357c3bd88bd1a6",
+            "chapter_number": 2,
+            "title": "The Farmer's Ruin",
+            "summary": "As harvest season approaches, the wolf spends more and more time desparately seeking a new place of work with better conditions, making him neglect his duties, allowing pests to infest the crops. Bart, complacently managing the business from afar, drops in just before the harvest, in time to read wolf's resignation letter from the previous month which had been left on his desk. The grain rots in the fields, leaving Bart bankrupt and humiliated. The wolf has already moved on to Ben's lumber business, where he is hired as a forester.",
+            "content": "",
+            "audit_logs": [],
+            "metadata": {}
+        },
+        {
+            "id": "d0ba50e6be72411285595d948b978963",
+            "chapter_number": 3,
+            "title": "The Lumber Merchant's Dilemma",
+            "summary": "Ben, the second brother, runs a successful lumber business and hires the wolf as a foreman. The wolf quickly earns Ben's trust by completing tasks efficiently, but Ben views the wolf as nothing more than a subordinate and ignores wolfs warnings about beaver activity. The beavers, whose territory the lumber company encroaches upon, begin to mobilise politically against Ben's operations. While Ben dismisses the wolf's concerns, the beavers organize a campaign for indigenous land rights, leading to a standoff between the company and the beavers, crippling Ben's business. Ben recognises wolf's efforts too late, and provides wolf with a letter of recommendation.",
+            "content": "",
+            "audit_logs": [],
+            "metadata": {}
+        },
+        {
+            "id": "accc448c0a8f48ae88b9e6d81d88dbb9",
+            "chapter_number": 4,
+            "title": "The Worth of a Wolf",
+            "summary": "The third brother, Bill, having learned \"the worth of an individual is often more than you might expect, given the right conditions\", opens a sustainable construction company that aligns with the beavers' environmental goals. The wolf, exploring options, presents his idea for wolf-aware housing, a \"cave and glade\" design. Bill accepts the idea, but they then work together to integrate many communities of animal in a mixed community model which wins awards, lucrative contracts and brings huge success and renown to them both. ",
+            "content": "",
+            "audit_logs": [],
+            "metadata": {}
+        }
+    ],
+    "current_phase": "Brainstorming",
+    "last_updated": "2026-04-25T17:50:23.115554"
+}

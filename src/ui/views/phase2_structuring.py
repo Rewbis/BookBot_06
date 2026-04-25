@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from src.core.state import Chapter, TensionBeat
+from src.core.state import Chapter
 from src.ui.utils import run_orchestrator, mark_dirty
 
 def reindex_chapters():
@@ -18,8 +18,8 @@ def render_phase2():
     col_t1, col_t2 = st.columns([1, 4])
     with col_t1:
         target = st.session_state.registry.target_chapters
-        if st.button(f"🗺️ Plot {target} Chapters", help="The Skeleton Plotter will generate a full draft outline."):
-            with st.status("Orchestrator: Plotting Skeleton...", expanded=True) as status:
+        if st.button(f"🗺️ 02a_skeleton_plotter: Plot {target} Chapters", help="The Skeleton Plotter will generate a full draft outline."):
+            with st.status("Orchestrator: 02a_skeleton_plotter plotting...", expanded=True) as status:
                 run_orchestrator("plot_skeleton")
                 status.update(label="Skeleton Generated!", state="complete")
                 st.rerun()
@@ -73,44 +73,3 @@ def render_phase2():
     if st.button("💾 Save Full Skeleton", use_container_width=True):
         st.session_state.pm.save_project(st.session_state.registry)
         st.success("Full skeleton persisted!")
-
-    st.divider()
-
-    # --- Tension & Arcs ---
-    st.subheader("📈 Tension & Arc Visualization")
-    beats = st.session_state.registry.tension_graph
-    if beats:
-        chart_data = [{"Chapter": b.chapter_number, "Tension": b.tension_level, "Emotion": b.emotion} for b in beats]
-        df = pd.DataFrame(chart_data).set_index("Chapter")
-        st.line_chart(df, height=300)
-        
-        with st.expander("Detailed Beat Data"):
-            for i, b in enumerate(st.session_state.registry.tension_graph):
-                col_b1, col_b2, col_b3 = st.columns([1, 1, 3])
-                with col_b1:
-                    b.tension_level = st.slider(f"Ch {b.chapter_number} Tension", 1, 10, b.tension_level, key=f"tens_{i}")
-                with col_b2:
-                    b.emotion = st.text_input(f"Emotion", b.emotion, key=f"emo_{i}")
-                with col_b3:
-                    b.summary = st.text_area(f"Summary", b.summary, key=f"sum_{i}")
-                if st.button(f"Remove Beat {i}", key=f"del_beat_{i}"):
-                    st.session_state.registry.tension_graph.pop(i)
-                    st.rerun()
-            
-            if st.button("💾 Save Tension Edits"):
-                st.session_state.pm.save_project(st.session_state.registry)
-                st.success("Tension beats saved!")
-    else:
-        st.info("No tension beats yet. Use the manual entry below or run the Plotter.")
-
-    with st.expander("➕ Add Manual Tension Beat"):
-        with st.form("new_beat_form"):
-            b_chap = st.number_input("Chapter", min_value=1, value=len(beats)+1)
-            b_level = st.slider("Tension Level", 1, 10, 5)
-            b_emotion = st.text_input("Primary Emotion", placeholder="e.g. Dread")
-            b_summary = st.text_area("Beat Summary")
-            if st.form_submit_button("Add Beat"):
-                new_beat = TensionBeat(chapter_number=b_chap, tension_level=b_level, emotion=b_emotion, summary=b_summary)
-                st.session_state.registry.tension_graph.append(new_beat)
-                st.session_state.registry.tension_graph.sort(key=lambda x: x.chapter_number)
-                st.rerun()

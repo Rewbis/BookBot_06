@@ -64,15 +64,9 @@ class Conflict(BaseModel):
     resolved: bool = False
     timestamp: datetime = Field(default_factory=datetime.now)
 
-class TensionBeat(BaseModel):
-    """An emotional data point for pacing analysis."""
-    chapter_number: int
-    tension_level: int = 5 # 1-10
-    emotion: str = "" # e.g. "Dread", "Joy", "Relief"
-    summary: str = ""
 
 class AgentMessage(BaseModel):
-    """A message in the blackboard or history."""
+    """A message in the project history or agent logs."""
     sender: str = "" # e.g. "Brainstormer", "Devil's Advocate"
     content: str = ""
     timestamp: datetime = Field(default_factory=datetime.now)
@@ -99,7 +93,6 @@ class ProjectRegistry(BaseModel):
     world_bible: WorldBible = Field(default_factory=WorldBible)
     shadow_context: ShadowContext = Field(default_factory=ShadowContext)
     conflict_registry: List[Conflict] = Field(default_factory=list)
-    tension_graph: List[TensionBeat] = Field(default_factory=list)
     
     # Message History (Agent Debates & Logs)
     history: List[AgentMessage] = Field(default_factory=list)

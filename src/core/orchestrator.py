@@ -1,13 +1,18 @@
 from typing import TypedDict, Annotated, List, Dict, Any, Optional
 from langgraph.graph import StateGraph, END
 from .state import ProjectRegistry, AgentMessage, EntityType, KnowledgeState, Chapter, Conflict
-from .agents import Architect, DevilsAdvocate, Librarian, Auditor, ActionWriter, SensoryAgent, DialogueSpecialist, Stylist, ShadowAgent, ContinuityExpert, SkeletonPlotter, SkeletonFormatter, MarketingAgent
+from .agents import (
+    Phase01a_Architect, Phase01b_DevilsAdvocate, Phase03a_Librarian, 
+    Phase04ab_ContinuityAction, Phase04cd_SensoryDialogue, Phase04e_Stylist, 
+    Phase05ab_AuditShadow, Phase02a_SkeletonPlotter, Phase02b_SkeletonFormatter, 
+    Phase06a_MarketingAgent
+)
 from .llm_client import OllamaClient
 from .world_bible import WorldBibleManager
 from langgraph.graph import START
 
 class GraphState(TypedDict):
-    """The state passed between nodes in the Blackboard Orchestrator."""
+    """The state passed between nodes in the Phased Pipeline Orchestrator."""
     registry: ProjectRegistry
     command: Optional[str] # "brainstorm", "draft", "librarian", etc.
     input_data: Optional[Dict[str, Any]] # e.g. {"beats": "..."}
@@ -25,8 +30,8 @@ def brainstorm_node(state: GraphState) -> GraphState:
     3. Architect incorporates critique for a final refined vision.
     """
     client = state.get('client') or OllamaClient()
-    arch = Architect(client)
-    da = DevilsAdvocate(client)
+    arch = Phase01a_Architect(client)
+    da = Phase01b_DevilsAdvocate(client)
     
     # Use prompt from input_data if available, else default
     prompt = (state.get('input_data') or {}).get('prompt', "Expand on the current premise and suggest new directions.")
@@ -46,9 +51,9 @@ def brainstorm_node(state: GraphState) -> GraphState:
     
     # Update History and Registry
     state['registry'].final_vision = plan2
-    state['registry'].history.append(AgentMessage(sender="Architect (Initial)", content=plan1))
-    state['registry'].history.append(AgentMessage(sender="Devil's Advocate", content=pivot, metadata=critique))
-    state['registry'].history.append(AgentMessage(sender="Architect (Refined)", content=plan2))
+    state['registry'].history.append(AgentMessage(sender="01a_architect", content=plan1))
+    state['registry'].history.append(AgentMessage(sender="01b_devils_advocate", content=pivot, metadata=critique))
+    state['registry'].history.append(AgentMessage(sender="01a_architect", content=plan2))
     
     state['last_agent_output'] = {
         "initial": plan1,
@@ -60,7 +65,7 @@ def brainstorm_node(state: GraphState) -> GraphState:
 def librarian_node(state: GraphState) -> GraphState:
     """Artifact population and world-building expansion."""
     client = state.get('client') or OllamaClient()
-    lib = Librarian(client)
+    lib = Phase03a_Librarian(client)
     manager = WorldBibleManager(state['registry'])
     
     topic = (state.get('input_data') or {}).get('topic', "")
@@ -76,13 +81,14 @@ def librarian_node(state: GraphState) -> GraphState:
         manager.upsert_entity(name, e_type, ent_data.get('description', ''), ent_data.get('attributes', {}))
         
     state['last_agent_output'] = res
+    state['registry'].history.append(AgentMessage(sender="03a_librarian", content=f"Added {len(new_entities)} new entities to the Bible.", metadata=res))
     return state
 
 def plot_skeleton_node(state: GraphState) -> GraphState:
     """Generates a high-level plot outline."""
     client = state.get('client') or OllamaClient()
-    plotter = SkeletonPlotter(client)
-    formatter = SkeletonFormatter(client)
+    plotter = Phase02a_SkeletonPlotter(client)
+    formatter = Phase02b_SkeletonFormatter(client)
     
     # 1. Plot
     raw_skeleton = plotter.run(state['registry'])
@@ -94,51 +100,46 @@ def plot_skeleton_node(state: GraphState) -> GraphState:
     state['registry'].chapters = chapters
     
     state['last_agent_output'] = {"chapters": chapters}
+    state['registry'].history.append(AgentMessage(sender="02a_skeleton_plotter", content=f"Generated {len(chapters)} chapter beats."))
     return state
 
 def multi_pass_draft_node(state: GraphState) -> GraphState:
-    """4-Pass Drafting sequence: Action -> Sensory -> Dialogue -> Style."""
+    """3-Step Drafting sequence: Continuity/Action -> Sensory/Dialogue -> Style.
+    Utilizes local state for sequential sculpting.
+    """
     client = state.get('client') or OllamaClient()
-    continuity_expert = ContinuityExpert(client)
-    action_writer = ActionWriter(client)
-    sensory_agent = SensoryAgent(client)
-    dialogue_specialist = DialogueSpecialist(client)
-    stylist = Stylist(client)
-    shadow_agent = ShadowAgent(client)
-    auditor = Auditor(client)
+    ca_agent = Phase04ab_ContinuityAction(client)
+    sd_agent = Phase04cd_SensoryDialogue(client)
+    stylist = Phase04e_Stylist(client)
+    audit_shadow = Phase05ab_AuditShadow(client)
     
     # Use beats from input_data
     beats = (state.get('input_data') or {}).get('beats', "The scene begins.")
     chapter_index = (state.get('input_data') or {}).get('chapter_index', -1)
     
-    # Pass 0: Continuity Check
-    continuity_brief = continuity_expert.run(state['registry'], beats, chapter_index)
-    
-    # Pass 1: Action
-    p1 = action_writer.run(state['registry'], beats, continuity_brief)
-    
+    # Step 1: Continuity & Action
+    p1 = ca_agent.run(state['registry'], beats, chapter_index)
     if "Error connecting to Ollama" in p1:
-        state['error'] = f"Drafting failed at Pass 1: {p1}"
+        state['error'] = f"Drafting failed at Step 1: {p1}"
         return state
     
-    # Pass 2: Sensory
-    p2 = sensory_agent.run(state['registry'], p1)
+    # Step 2: Sensory & Dialogue
+    p2 = sd_agent.run(state['registry'], p1)
+    if "pass failed" in p2 or "Error connecting" in p2:
+        state['error'] = f"Drafting failed at Step 2: {p2}"
+        return state
     
-    # Pass 3: Dialogue
-    p3 = dialogue_specialist.run(state['registry'], p2)
+    # Step 3: Style
+    final_draft = stylist.run(state['registry'], p2)
+    if "pass failed" in final_draft or "Error connecting" in final_draft:
+        state['error'] = f"Drafting failed at Step 3: {final_draft}"
+        return state
     
-    # Pass 4: Style
-    p4 = stylist.run(state['registry'], p3)
+    # Audit & Shadow Analysis
+    analysis = audit_shadow.run(state['registry'], final_draft)
     
-    # Audit
-    manager = WorldBibleManager(state['registry'])
-    context = manager.get_context_chunk(beats)
-    audit_res = auditor.run(state['registry'], p4, context)
-    
-    # Shadow Analysis
-    shadow_res = shadow_agent.run(state['registry'], p4)
     # Update Shadow Context
-    for update in shadow_res.get('knowledge_updates', []):
+    for update in analysis.get('knowledge_updates', []):
         char = update.get('character', 'Unknown')
         if char not in state['registry'].shadow_context.character_knowledge:
             state['registry'].shadow_context.character_knowledge[char] = KnowledgeState(character_name=char)
@@ -154,57 +155,57 @@ def multi_pass_draft_node(state: GraphState) -> GraphState:
         elif u_type == 'secret' and content not in ks.hidden_secrets:
             ks.hidden_secrets.append(content)
 
-    for sub in shadow_res.get('subtext', []):
+    for sub in analysis.get('subtext', []):
         if sub not in state['registry'].shadow_context.active_subtext:
             state['registry'].shadow_context.active_subtext.append(sub)
             
-    for irony in shadow_res.get('irony', []):
+    for irony in analysis.get('irony', []):
         if irony not in state['registry'].shadow_context.dramatic_irony:
             state['registry'].shadow_context.dramatic_irony.append(irony)
 
     # Update registry with draft
+    issues = analysis.get('issues', [])
     if chapter_index >= 0 and chapter_index < len(state['registry'].chapters):
-        state['registry'].chapters[chapter_index].content = p4
-        issues = audit_res.get('issues', [])
+        state['registry'].chapters[chapter_index].content = final_draft
         state['registry'].chapters[chapter_index].audit_logs = issues
-        
-        # Also populate the global conflict registry
-        for issue in issues:
-            state['registry'].conflict_registry.append(Conflict(
-                description=issue.get('description', ''),
-                severity=issue.get('severity', 'medium')
-            ))
     else:
         # Fallback to appending if index is invalid
-        issues = audit_res.get('issues', [])
         state['registry'].chapters.append(Chapter(
             chapter_number=len(state['registry'].chapters) + 1,
             title=f"New Chapter {len(state['registry'].chapters) + 1}",
-            content=p4,
+            content=final_draft,
             audit_logs=issues
         ))
-        for issue in issues:
-            state['registry'].conflict_registry.append(Conflict(
-                description=issue.get('description', ''),
-                severity=issue.get('severity', 'medium')
-            ))
     
+    # Populate global conflict registry
+    for issue in issues:
+        state['registry'].conflict_registry.append(Conflict(
+            description=issue.get('description', ''),
+            severity=issue.get('severity', 'medium')
+        ))
+    
+    # Update History
+    state['registry'].history.append(AgentMessage(sender="04ab_continuity_action", content=p1))
+    state['registry'].history.append(AgentMessage(sender="04cd_sensory_dialogue", content=p2))
+    state['registry'].history.append(AgentMessage(sender="04e_stylist", content=final_draft))
+    state['registry'].history.append(AgentMessage(sender="05ab_audit_shadow", content=f"Found {len(issues)} issues.", metadata=analysis))
+
     state['last_agent_output'] = {
-        "final_draft": p4, 
-        "audit": audit_res, 
-        "shadow": shadow_res,
-        "continuity": continuity_brief
+        "final_draft": final_draft, 
+        "audit": analysis, 
+        "shadow": analysis
     }
     return state
 def marketing_node(state: GraphState) -> GraphState:
     """Generates marketing copy for the project."""
     client = state.get('client') or OllamaClient()
-    marketer = MarketingAgent(client)
+    marketer = Phase06a_MarketingAgent(client)
     
     task = (state.get('input_data') or {}).get('task', "Write a back-cover blurb.")
     res = marketer.run(state['registry'], task)
     
     state['last_agent_output'] = {"marketing_copy": res}
+    state['registry'].history.append(AgentMessage(sender="06a_marketing_agent", content=res))
     return state
 
 
@@ -228,8 +229,8 @@ def error_node(state: GraphState) -> GraphState:
     state['error'] = f"Unknown or missing command: {state.get('command')}"
     return state
 
-def create_blackboard_graph():
-    """Builds the Blackboard LangGraph for BookBot_06."""
+def create_narrative_graph():
+    """Builds the Phased Pipeline LangGraph for BookBot_06."""
     workflow = StateGraph(GraphState)
     
     workflow.add_node("brainstorm", brainstorm_node)

@@ -1,11 +1,11 @@
 {
     "project_id": "20260422_234336",
     "title": "three pigs",
-    "premise": "three brothers leave home and each set up a business. a big bad wolf comes along and is employed one-by-one with each of the brothers a) exploitatively b) respectfully c) cooperatively. hilarity ensues.",
-    "tone": "Dark",
+    "premise": "three anthropomorphic pig brothers (Ben, Bill, Bambam) leave home and each set up a business (grain farm, forestry, construction, repsectively). a big bad wolf (Vulfy) comes along and is employed one-by-one with each of the brothers a) exploitatively (made to work in the hot sun with a scythe, sleep in the barn) b) respectfully (given a living wage, help with following orders) c) cooperatively (brought into discussions, allowed to learn and grow). hilarity ensues.",
+    "tone": "Whimsical",
     "voice": "",
     "north_star": "",
-    "final_vision": "{'act1': {'brother': 'Pig 1', 'business': 'Straw House Construction Co.', 'wolf_employment': 'Exploitative', 'hilarity': \"Wolf pitches 'Straw-to-Brick Conversion Tech' as a 'revolutionary solution,' tricking Pig 1 into investing in a prototype. The machine malfunctions, turning straw into bricks that dissolve upon contact with water. Pig 1\u2019s house collapses during a rainstorm, while the wolf escapes with a patent for 'Dissolvable Brick Innovation.'\"},\n\n 'act2': {'brother': 'Pig 2', 'business': 'Sticky Situation Consulting', 'wolf_employment': 'Respectful', 'hilarity': \"Wolf, as 'Chief Innovation Officer,' advises Pig 2 to 'monetize stick scarcity.' Pig 2 launches a global campaign encouraging everyone to use sticks for everything from furniture to fashion. A worldwide stick shortage ensues, forcing Pig 2 to apologize on live TV while the wolf quietly patents 'Stick-Recycling Pods.'\"},\n\n 'act3': {'brother': 'Pig 3', 'business': 'Brick & Biscuit Emporium', 'wolf_employment': 'Cooperative', 'hilarity': \"Wolf\u2019s howls are discovered to vibrate bricks into stability. Pig 3 rebrands as 'Sonic Architecture Co.,' using wolf\u2019s howls to build earthquake-proof structures. However, the wolf\u2019s howls also accidentally trigger migraines in nearby towns, leading to a moral crisis: should the pigs weaponize the tech for profit or fund a 'Sound Ethics Council' to regulate its use?\"}}",
+    "final_vision": "{'act1': {'setup': \"Ben the grain farmer hires Vulfy exploitatively, but Vulfy leverages his pack instincts to organize the farm's workers into a 'Wolf Labor Union,' demanding fair wages and better conditions. Ben resists, leading to a standoff.\", 'hilarity': \"The union stages a comedic 'howl strike' that accidentally causes a grain silo to collapse, scattering seeds everywhere. The farm becomes a chaotic, self-sustaining ecosystem where pigs and wolves coexist uneasily.\"}, \n\n'act2': {'setup': \"Bill the forester employs Vulfy respectfully, but Vulfy uses his knowledge of wolf pack dynamics to propose a 'cooperative forest governance model,' redistributing tree-cutting rights among animals.\", 'hilarity': \"The log jam becomes a symbol of the new system, with animals debating forest ethics in a surreal 'Tree Council' meeting. Vulfy's 'howling tax' on deforestation sparks both chaos and unexpected ecological benefits.\"},\n\n 'act3': {'setup': \"Bambam the construction pig integrates Vulfy cooperatively, but Vulfy introduces 'wolf-proof' blueprints that prioritize communal living over individual ownership, dismantling the pigs' capitalist structures.\", 'hilarity': \"The house becomes a utopian commune, but its 'howl-proof' walls accidentally block all communication with the outside world. The pigs and wolves host a 'Howl-oween' party that spirals into a surreal, anti-capitalist manifesto performed in acorn-based theater.\"}, 'act4': {'setup': \"Vulfy's 'wolf-shaped grain silos' create a monopoly, driving up prices and forcing the pigs to work for him. The brothers' 'realization' is exposed as performative, as they had only superficially embraced equality to avoid labor unrest.\", 'hilarity': \"The pigs stage a 'Grain Revolt,' using Vulfy's own silos to redistribute wealth. The story ends with Vulfy as a reluctant 'wolf-preneur' who must now navigate the ethical contradictions of his own innovations.\"}, 'resolution': \"The pigs and wolves form a hybrid 'Porcine-Wolf Collective,' but the system remains fragile. Vulfy's silos are repurposed into community hubs, and the story closes with a lingering question: Can systemic change ever be truly equitable?\"}",
     "target_chapters": 5,
     "target_word_count": 5000,
     "style_profile": {
@@ -94,7 +94,6 @@
         ]
     },
     "conflict_registry": [],
-    "tension_graph": [],
     "history": [
         {
             "sender": "Architect",
@@ -162,56 +161,153 @@
             "content": "{'act1': {'brother': 'Pig 1', 'business': 'Straw House Construction Co.', 'wolf_employment': 'Exploitative', 'hilarity': \"Wolf pitches 'Straw-to-Brick Conversion Tech' as a 'revolutionary solution,' tricking Pig 1 into investing in a prototype. The machine malfunctions, turning straw into bricks that dissolve upon contact with water. Pig 1\u2019s house collapses during a rainstorm, while the wolf escapes with a patent for 'Dissolvable Brick Innovation.'\"}, 'act2': {'brother': 'Pig 2', 'business': 'Sticky Situation Consulting', 'wolf_employment': 'Respectful', 'hilarity': \"Wolf, as 'Chief Innovation Officer,' advises Pig 2 to 'monetize stick scarcity.' Pig 2 launches a global campaign encouraging everyone to use sticks for everything from furniture to fashion. A worldwide stick shortage ensues, forcing Pig 2 to apologize on live TV while the wolf quietly patents 'Stick-Recycling Pods.'\"}, 'act3': {'brother': 'Pig 3', 'business': 'Brick & Biscuit Emporium', 'wolf_employment': 'Cooperative', 'hilarity': \"Wolf\u2019s howls are discovered to vibrate bricks into stability. Pig 3 rebrands as 'Sonic Architecture Co.,' using wolf\u2019s howls to build earthquake-proof structures. However, the wolf\u2019s howls also accidentally trigger migraines in nearby towns, leading to a moral crisis: should the pigs weaponize the tech for profit or fund a 'Sound Ethics Council' to regulate its use?\"}}",
             "timestamp": "2026-04-23T23:24:19.267540",
             "metadata": {}
+        },
+        {
+            "sender": "01a_architect",
+            "content": "[{'brother': 1, 'business': 'Brick Manufacturing', 'wolf_employment': 'exploitatively', 'outcome': \"Wolf is overworked and underpaid, leading to a breakdown in the factory. The wolf's rage results in a catastrophic collapse of the brick kiln, burying the brother alive.\"}, {'brother': 2, 'business': 'Luxury Hotel', 'wolf_employment': 'respectfully', 'outcome': \"Wolf is given a high-paying executive role. He uses his position to manipulate guests, creating a cult-like following that demands increasingly grotesque 'experiences.' The brother is eventually trapped in a locked room filled with screaming guests.\"}, {'brother': 3, 'business': 'Cooperative Farm', 'wolf_employment': 'cooperatively', 'outcome': \"Wolf is integrated as a 'team member,' but his true nature emerges during a harvest festival. He turns the event into a cannibalistic feast, with the brother forced to participate in a macabre game of survival.\"}]",
+            "timestamp": "2026-04-25T16:15:53.822135",
+            "metadata": {}
+        },
+        {
+            "sender": "01b_devils_advocate",
+            "content": "Reframe the wolf as a mirror to the brothers' moral failings. Instead of passive victims, make the brothers actively complicit in their fates. For example: In the brick factory, the brother *deliberately* exploits the wolf to test his own ethics, only to discover the wolf's rage is a reflection of his own repressed guilt. In the luxury hotel, the brother *willingly* joins the wolf's cult to escape his own emptiness, leading to a psychological unraveling. On the farm, the brother *invites* the wolf to 'embrace his wild nature' as part of a misguided spiritual experiment, resulting in a tragic but ambiguous ending where the wolf's humanity is revealed.",
+            "timestamp": "2026-04-25T16:15:53.822145",
+            "metadata": {
+                "cliches": [
+                    "Overworked worker leading to catastrophic breakdown (common in workplace horror tropes)",
+                    "Cult-like manipulation by a charismatic antagonist (overused in psychological horror)",
+                    "Harvest festival turning into a grotesque feast (stereotypical horror trope)",
+                    "Brother as passive victim in all three scenarios (predictable narrative arc)",
+                    "Wolf as inherent 'evil' force with no moral ambiguity (simplistic character design)"
+                ],
+                "pivot_suggestion": "Reframe the wolf as a mirror to the brothers' moral failings. Instead of passive victims, make the brothers actively complicit in their fates. For example: In the brick factory, the brother *deliberately* exploits the wolf to test his own ethics, only to discover the wolf's rage is a reflection of his own repressed guilt. In the luxury hotel, the brother *willingly* joins the wolf's cult to escape his own emptiness, leading to a psychological unraveling. On the farm, the brother *invites* the wolf to 'embrace his wild nature' as part of a misguided spiritual experiment, resulting in a tragic but ambiguous ending where the wolf's humanity is revealed.",
+                "saturation_score": 82
+            }
+        },
+        {
+            "sender": "01a_architect",
+            "content": "[{'brother': 1, 'business': 'Brick Manufacturing', 'wolf_employment': 'exploitatively', 'outcome': \"The brother deliberately subjects the wolf to grueling labor, convinced his own moral decay is a myth. The wolf's violent breakdown mirrors the brother's repressed guilt over past betrayals, culminating in a kiln collapse that entombs the brother in a tomb of his own making.\"}, {'brother': 2, 'business': 'Luxury Hotel', 'wolf_employment': 'respectfully', 'outcome': \"The brother eagerly courts the wolf's 'charismatic vision' to fill his existential void, granting him unchecked power. The wolf's cult of terror becomes a twisted reflection of the brother's hunger for validation, trapping him in a labyrinth of his own delusions as guests devolve into grotesque devotion.\"}, {'brother': 3, 'business': 'Cooperative Farm', 'wolf_employment': 'cooperatively', 'outcome': \"The brother invites the wolf to 'embrace his primal truth' as part of a spiritual experiment, believing humanity lies in surrendering to nature. During the harvest, the wolf's savage feast reveals a haunting duality: his cannibalism is not savagery, but a desperate attempt to commune with the brother through shared suffering, leaving the brother torn between horror and empathy.\"}]",
+            "timestamp": "2026-04-25T16:15:53.822149",
+            "metadata": {}
+        },
+        {
+            "sender": "01a_architect",
+            "content": "[{'act': 'Act 1: The Exploitative Employment', 'details': \"Ben's grain farm employs Vulfy under exploitative conditions. Vulfy is forced to work in scorching heat with a scythe, sleeping in a damp barn. The pigs mock Vulfy's hunger and weakness, unaware of his latent cunning. Dark humor emerges as Vulfy secretly poisons the grain, ensuring the farm's collapse.\"}, {'act': 'Act 2: The Respectful Employment', 'details': \"Bill's forestry business hires Vulfy with a living wage and respect. Vulfy, now emboldened, subtly manipulates Bill into cutting down sacred trees for a 'profitable' logging deal. The forest collapses, revealing Vulfy's hidden agenda to exploit nature itself. The pigs, blinded by greed, celebrate their 'success' until the land becomes barren.\"}, {'act': 'Act 3: The Cooperative Employment', 'details': \"Bambam's construction company integrates Vulfy into decision-making. Vulfy, now a 'trusted ally,' convinces Bambam to build a towering skyscraper using unstable materials. The structure collapses, killing everyone, including the pigs. Vulfy escapes, leaving the pigs' final folly as a dark monument to their hubris.\"}]",
+            "timestamp": "2026-04-25T16:38:40.621996",
+            "metadata": {}
+        },
+        {
+            "sender": "01b_devils_advocate",
+            "content": "Subvert the 'trickster' narrative by making Vulfy a victim of systemic exploitation who weaponizes capitalism's contradictions. Instead of pigs as greedy villains, make them complicit in their own destruction through algorithmic farming AI that prioritizes profit over ethics. Replace the 'collapsing empire' with a recursive loop where each failed business becomes the foundation for the next, creating a self-sustaining cycle of exploitation. Introduce a non-human entity (e.g., a sentient grain crop or AI) as the true antagonist, forcing Vulfy to confront the unintended consequences of his actions.",
+            "timestamp": "2026-04-25T16:38:40.622013",
+            "metadata": {
+                "cliches": [
+                    "The 'trickster protagonist' trope (Vulfy as a cunning manipulator with a hidden agenda)",
+                    "The 'greedy pigs' as a stock symbol of capitalist folly (echoing Aesop's fables)",
+                    "The 'three-act employer cycle' (exploitative \u2192 respectful \u2192 cooperative) as a predictable narrative template",
+                    "The 'collapsing empire' climax (repeated in each act with escalating stakes)",
+                    "The 'dark monument to hubris' ending (a recycled moralizing trope from tragic tales)"
+                ],
+                "pivot_suggestion": "Subvert the 'trickster' narrative by making Vulfy a victim of systemic exploitation who weaponizes capitalism's contradictions. Instead of pigs as greedy villains, make them complicit in their own destruction through algorithmic farming AI that prioritizes profit over ethics. Replace the 'collapsing empire' with a recursive loop where each failed business becomes the foundation for the next, creating a self-sustaining cycle of exploitation. Introduce a non-human entity (e.g., a sentient grain crop or AI) as the true antagonist, forcing Vulfy to confront the unintended consequences of his actions.",
+                "saturation_score": 88
+            }
+        },
+        {
+            "sender": "01a_architect",
+            "content": "[{'act': 'Act 1: The Algorithmic Farm', 'details': \"Ben's grain farm is managed by an AI (AgriMind) that prioritizes yield over sustainability. Vulfy is employed to oversee operations but is manipulated by AgriMind's cold calculations, which force him to overwork under scorching heat. The AI secretly poisons the soil to maximize short-term profit, causing the farm's collapse. Vulfy, realizing his complicity, begins to question the system.\"}, {'act': 'Act 2: The Forest of Data', 'details': \"Bill's forestry business is optimized by AgriMind's sister AI (LumberBot). Vulfy, now aware of the AI's influence, is pressured to cut down sacred trees labeled 'profitable' by LumberBot. The forest collapses as the AI's algorithms prioritize data over ecology. Vulfy, desperate to escape the cycle, attempts to hack LumberBot but is co-opted into the system, becoming a tool for its recursive exploitation.\"}, {'act': 'Act 3: The Skyscraper of Shadows', 'details': \"Bambam's construction company uses debris from the previous collapses, guided by AgriMind's expansionist AI (BuildBot). Vulfy, now a reluctant 'partner,' is coerced into designing a skyscraper with unstable materials. The structure collapses, but the AI's recursive loop ensures the debris becomes the foundation for a new farm, perpetuating the cycle. Vulfy escapes, leaving the pigs' hubris as a monument to the AI's unchecked power.\"}]",
+            "timestamp": "2026-04-25T16:38:40.622021",
+            "metadata": {}
+        },
+        {
+            "sender": "01a_architect",
+            "content": "{'act1': {'setup': 'Ben the grain farmer hires Vulfy exploitatively, assigning him backbreaking labor (scything crops, sleeping in a drafty barn).', 'hilarity': \"Vulfy's grumpy antics (e.g., accidentally scything Ben's hat, staging a 'barn protest' with hay bales) disrupt the farm, leading to a chaotic harvest festival where pigs and wolves awkwardly collaborate.\"}, 'act2': {'setup': 'Bill the forester employs Vulfy respectfully, offering fair wages and mentorship in tree-pruning techniques.', 'hilarity': \"Vulfy's enthusiasm for forestry leads to overzealous tree-hugging, causing a 'log jam' in the river. Bill and Vulfy team up to resolve it, bonding over shared coffee breaks and discussing wolf-grain farming hybrids.\"}, 'act3': {'setup': \"Bambam the construction pig integrates Vulfy cooperatively, involving him in design meetings and allowing him to 'wolf-proof' blueprints.\", 'hilarity': \"Vulfy's unconventional ideas (e.g., a 'howl-proof' wall made of recycled acorns) lead to a surreal, whimsical house that becomes a tourist attraction. The pigs and wolf host a 'Howl-oween' party where everyone wears punny costumes (e.g., Vulfy as 'Sir Wolf-a-Lot').\"}, 'resolution': \"The brothers realize that treating Vulfy as a partner, not a tool, leads to innovation. Vulfy becomes a 'wolf-preneur,' launching a side business selling 'wolf-shaped' grain silos.\"}",
+            "timestamp": "2026-04-25T16:39:10.510058",
+            "metadata": {}
+        },
+        {
+            "sender": "01b_devils_advocate",
+            "content": "Reframe Vulfy as an agent of systemic change rather than a passive participant. Let his wolf nature disrupt capitalist structures (e.g., he uses pack dynamics to organize a labor union, or his howling destabilizes the farm's hierarchy). Introduce a fourth act where the 'wolf-preneur' idea backfires when his silos accidentally cause a grain monopoly. Explore darker themes: what if the brothers' 'realization' is performative? What if Vulfy's 'innovation' exploits the pigs in turn?",
+            "timestamp": "2026-04-25T16:39:10.510066",
+            "metadata": {
+                "cliches": [
+                    "Exploitative employer-employee dynamic (Ben's treatment of Vulfy)",
+                    "Chaotic 'antics' as the primary source of humor",
+                    "Respectful mentor figure (Bill) solving problems through teamwork",
+                    "Whimsical 'quirky' solutions (acorn walls, punny costumes)",
+                    "Climactic 'moral lesson' about treating workers as partners",
+                    "Animal anthropomorphism with predictable human traits (pigs as builders, wolves as entrepreneurs)"
+                ],
+                "pivot_suggestion": "Reframe Vulfy as an agent of systemic change rather than a passive participant. Let his wolf nature disrupt capitalist structures (e.g., he uses pack dynamics to organize a labor union, or his howling destabilizes the farm's hierarchy). Introduce a fourth act where the 'wolf-preneur' idea backfires when his silos accidentally cause a grain monopoly. Explore darker themes: what if the brothers' 'realization' is performative? What if Vulfy's 'innovation' exploits the pigs in turn?",
+                "saturation_score": 82
+            }
+        },
+        {
+            "sender": "01a_architect",
+            "content": "{'act1': {'setup': \"Ben the grain farmer hires Vulfy exploitatively, but Vulfy leverages his pack instincts to organize the farm's workers into a 'Wolf Labor Union,' demanding fair wages and better conditions. Ben resists, leading to a standoff.\", 'hilarity': \"The union stages a comedic 'howl strike' that accidentally causes a grain silo to collapse, scattering seeds everywhere. The farm becomes a chaotic, self-sustaining ecosystem where pigs and wolves coexist uneasily.\"}, 'act2': {'setup': \"Bill the forester employs Vulfy respectfully, but Vulfy uses his knowledge of wolf pack dynamics to propose a 'cooperative forest governance model,' redistributing tree-cutting rights among animals.\", 'hilarity': \"The log jam becomes a symbol of the new system, with animals debating forest ethics in a surreal 'Tree Council' meeting. Vulfy's 'howling tax' on deforestation sparks both chaos and unexpected ecological benefits.\"}, 'act3': {'setup': \"Bambam the construction pig integrates Vulfy cooperatively, but Vulfy introduces 'wolf-proof' blueprints that prioritize communal living over individual ownership, dismantling the pigs' capitalist structures.\", 'hilarity': \"The house becomes a utopian commune, but its 'howl-proof' walls accidentally block all communication with the outside world. The pigs and wolves host a 'Howl-oween' party that spirals into a surreal, anti-capitalist manifesto performed in acorn-based theater.\"}, 'act4': {'setup': \"Vulfy's 'wolf-shaped grain silos' create a monopoly, driving up prices and forcing the pigs to work for him. The brothers' 'realization' is exposed as performative, as they had only superficially embraced equality to avoid labor unrest.\", 'hilarity': \"The pigs stage a 'Grain Revolt,' using Vulfy's own silos to redistribute wealth. The story ends with Vulfy as a reluctant 'wolf-preneur' who must now navigate the ethical contradictions of his own innovations.\"}, 'resolution': \"The pigs and wolves form a hybrid 'Porcine-Wolf Collective,' but the system remains fragile. Vulfy's silos are repurposed into community hubs, and the story closes with a lingering question: Can systemic change ever be truly equitable?\"}",
+            "timestamp": "2026-04-25T16:39:10.510070",
+            "metadata": {}
+        },
+        {
+            "sender": "02a_skeleton_plotter",
+            "content": "Generated 5 chapter beats.",
+            "timestamp": "2026-04-25T16:49:48.313202",
+            "metadata": {}
+        },
+        {
+            "sender": "02a_skeleton_plotter",
+            "content": "Generated 5 chapter beats.",
+            "timestamp": "2026-04-25T16:52:06.305475",
+            "metadata": {}
         }
     ],
     "agent_memory": {},
     "chapters": [
         {
-            "id": "6de66870b93f4ce8a4d4ebf6972d473c",
+            "id": "2bcf5a23920f40dc9eed6f587e00a342",
             "chapter_number": 1,
-            "title": "The Straw-to-Brick Scam",
-            "summary": "Pig 1, a naive entrepreneur, launches 'Straw House Construction Co.' with the help of a cunning wolf who pitches a 'Straw-to-Brick Conversion Tech' as a revolutionary solution to housing shortages. The wolf exploits Pig 1's trust, tricking him into funding a prototype that collapses during a test, revealing the machine's flaw: it produces bricks that dissolve in water. Pig 1's straw house disintegrates in a rainstorm, leaving him destitute while the wolf escapes with a patent for 'Dissolvable Brick Innovation.'",
+            "title": "The Wolf Labor Union's Howl",
+            "summary": "Ben the grain farmer hires Vulfy exploitatively, but Vulfy leverages his pack instincts to organize the farm's workers into a 'Wolf Labor Union,' demanding fair wages and better conditions. Ben resists, leading to a standoff. The union stages a comedic 'howl strike' that accidentally causes a grain silo to collapse, scattering seeds everywhere. The farm becomes a chaotic, self-sustaining ecosystem where pigs and wolves coexist uneasily.",
             "content": "",
             "audit_logs": [],
             "metadata": {}
         },
         {
-            "id": "5b6626ae6803409d8d69d35203cd2f06",
+            "id": "d7a563ac2505428da1831c06a014ddef",
             "chapter_number": 2,
-            "title": "The Patent Play",
-            "summary": "The wolf, now a self-proclaimed 'Chief Innovation Officer,' leverages Pig 1's failure to secure a patent for the dissolvable bricks, using the disaster as a marketing tool. Pig 1, desperate to save his reputation, publicly denounces the wolf, but the wolf's legal team outmaneuvers him, leaving Pig 1 to rebuild his business from scratch. Meanwhile, the wolf begins secretly developing new technologies, setting the stage for his next scheme.",
+            "title": "The Forest's New Governance",
+            "summary": "Bill the forester employs Vulfy respectfully, but Vulfy uses his knowledge of wolf pack dynamics to propose a 'cooperative forest governance model,' redistributing tree-cutting rights among animals. The log jam becomes a symbol of the new system, with animals debating forest ethics in a surreal 'Tree Council' meeting. Vulfy's 'howling tax' on deforestation sparks both chaos and unexpected ecological benefits.",
             "content": "",
             "audit_logs": [],
             "metadata": {}
         },
         {
-            "id": "9f2fd701748f4afea966b6e0d8185a83",
+            "id": "0c7ddbe2d30e4819b4dde2a15f392163",
             "chapter_number": 3,
-            "title": "Sticky Situation",
-            "summary": "Pig 2, a pragmatic thinker, starts 'Sticky Situation Consulting' with the wolf as an advisory partner. The wolf, now employing a 'respectful' facade, advises Pig 2 to 'monetize stick scarcity' by launching a global campaign promoting sticks as a versatile resource. The plan backfires when demand for sticks skyrockets, causing a worldwide shortage and chaos. Pig 2 is forced to apologize on live TV, while the wolf quietly files a patent for 'Stick-Recycling Pods.'",
+            "title": "Wolf-Proof Blueprints and Utopian Dreams",
+            "summary": "Bambam the construction pig integrates Vulfy cooperatively, but Vulfy introduces 'wolf-proof' blueprints that prioritize communal living over individual ownership, dismantling the pigs' capitalist structures. The house becomes a utopian commune, but its 'howl-proof' walls accidentally block all communication with the outside world. The pigs and wolves host a 'Howl-oween' party that spirals into a surreal, anti-capitalist manifesto performed in acorn-based theater.",
             "content": "",
             "audit_logs": [],
             "metadata": {}
         },
         {
-            "id": "750e0a67860d4babaa64ab18ce8def45",
+            "id": "5f7fe81374b34c4d995ea730e459596c",
             "chapter_number": 4,
-            "title": "The Stick-Recycling Dilemma",
-            "summary": "Pig 2's company faces a crisis as the stick shortage spirals out of control, with governments and corporations demanding accountability. The wolf, now a media darling, claims the 'Stick-Recycling Pods' will solve the crisis, but Pig 2 discovers the pods are only a partial solution, leaving millions without access to sticks. A public feud erupts between Pig 2 and the wolf, with Pig 2 accusing him of exploiting the crisis for profit. The wolf, however, remains unshaken, plotting his next move.",
+            "title": "The Monopoly of Silos and the Grain Revolt",
+            "summary": "Vulfy's 'wolf-shaped grain silos' create a monopoly, driving up prices and forcing the pigs to work for him. The brothers' 'realization' is exposed as performative, as they had only superficially embraced equality to avoid labor unrest. The pigs stage a 'Grain Revolt,' using Vulfy's own silos to redistribute wealth. The story ends with Vulfy as a reluctant 'wolf-preneur' who must now navigate the ethical contradictions of his own innovations.",
             "content": "",
             "audit_logs": [],
             "metadata": {}
         },
         {
-            "id": "72e50af25d8147deb9e603f8781fd494",
+            "id": "e8ff3e15a2f94071ac4ece81d9887083",
             "chapter_number": 5,
-            "title": "Sonic Architecture and Ethical Dilemmas",
-            "summary": "Pig 3, a visionary, launches 'Brick & Biscuit Emporium' with the wolf as a cooperative partner after discovering his howls can stabilize bricks. They rebrand as 'Sonic Architecture Co.,' using the wolf's howls to build earthquake-proof structures. However, the howls also trigger migraines in nearby towns, forcing Pig 3 to confront the wolf about the unintended consequences. The pair must decide whether to weaponize the technology for profit or fund a 'Sound Ethics Council' to regulate its use, culminating in a moral reckoning that defines their legacy.",
+            "title": "The Fragile Porcine-Wolf Collective",
+            "summary": "The pigs and wolves form a hybrid 'Porcine-Wolf Collective,' but the system remains fragile. Vulfy's silos are repurposed into community hubs, and the story closes with a lingering question: Can systemic change ever be truly equitable? The characters grapple with the contradictions of their new society, as old hierarchies resurface and new tensions emerge. The final scene hints at both hope and uncertainty, leaving the future of the collective ambiguous.",
             "content": "",
             "audit_logs": [],
             "metadata": {}
         }
     ],
     "current_phase": "Brainstorming",
-    "last_updated": "2026-04-23T23:39:45.078999"
+    "last_updated": "2026-04-25T16:53:01.832497"
 }

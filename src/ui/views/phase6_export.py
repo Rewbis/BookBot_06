@@ -16,7 +16,7 @@ def render_phase6():
             st.download_button("Download .md File", full_text, file_name=f"{st.session_state.registry.title}.md")
     
     with col_mk:
-        st.subheader("📣 Marketing Agent")
+        st.subheader("📣 06a_marketing_agent")
         task = st.text_input("Marketing Task", value="Write a back-cover blurb.")
         if st.button("✨ Generate Marketing Copy", use_container_width=True):
             with st.status("Orchestrator: Generating Marketing...", expanded=True) as status:

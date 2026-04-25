@@ -40,13 +40,24 @@ class BaseAgent:
     def run(self, registry: ProjectRegistry, **kwargs) -> Any:
         raise NotImplementedError
 
-class ContinuityExpert(BaseAgent):
-    """Agent 01b: Ensures consistency across phases and scene transitions."""
+    def _safe_prompt(self, system: str, user: str) -> Optional[str]:
+        """Wrapper for client.prompt that handles errors and empty responses."""
+        try:
+            res = self.client.prompt(system, user)
+            if not res or "Error connecting to Ollama" in res:
+                return None
+            return res
+        except Exception:
+            return None
+
+class Phase04ab_ContinuityAction(BaseAgent):
+    """Agent 04ab: Analyzes continuity and writes the initial action-oriented draft."""
     def get_system_prompt(self, registry: ProjectRegistry) -> str:
         return (
-            "You are the 'Continuity Expert'. Your job is to analyze the current scene's beats "
-            "against the World Bible and previous chapters to ensure no established facts are violated. "
-            "Identify key characters, locations, and rules that must be respected in the upcoming draft."
+            "You are the 'Continuity & Action Writer'. Your role is to ensure narrative integrity while drafting the scene's physical foundation.\n"
+            "1. Continuity: Analyze the scene beats against the World Bible and previous chapters to ensure no established facts are violated.\n"
+            "2. Action: Write a dry, plain-language 'Pass 1' draft focusing only on character actions, movement, and plot progression.\n"
+            "Respect character names, locations, and established lore while ensuring the physical action is clear and logical."
         )
 
     def run(self, registry: ProjectRegistry, beats: str, chapter_index: int) -> str:
@@ -54,11 +65,11 @@ class ContinuityExpert(BaseAgent):
         bible_context = self._get_world_context(registry, beats)
         prev_context = self._get_manuscript_context(registry, chapter_index)
         
-        user = f"Current Scene Beats: {beats}\n\n{bible_context}\n\n{prev_context}\n\nSummarize the MUST-FOLLOW continuity rules for this scene."
-        return self._safe_prompt(system, user) or "Continuity check failed (Ollama error)."
+        user = f"Current Scene Beats: {beats}\n\nWorld Bible Context: {bible_context}\n\nPrevious Chapter Context: {prev_context}\n\nWrite the skeletal action for this scene while strictly adhering to continuity."
+        return self._safe_prompt(system, user) or "Continuity & Action draft failed (Ollama error)."
 
-class Architect(BaseAgent):
-    """The Architect: Manages high-level schema and the 'North Star'.
+class Phase01a_Architect(BaseAgent):
+    """Agent 01a: Manages high-level schema and the 'North Star'.
     
     Sets the structural boundaries and thematic goals of the story. 
     Responsible for expanding premises and ensuring all other agents 
@@ -78,8 +89,8 @@ class Architect(BaseAgent):
         response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class DevilsAdvocate(BaseAgent):
-    """The Devil's Advocate: Identifies clichés and forces creative pivots.
+class Phase01b_DevilsAdvocate(BaseAgent):
+    """Agent 01b: Identifies clichés and forces creative pivots.
     
     Acts as an adversarial critic to prevent generic storytelling. 
     It intentionally looks for tropes and suggests high-impact creative deviations.
@@ -97,8 +108,8 @@ class DevilsAdvocate(BaseAgent):
         response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class Librarian(BaseAgent):
-    """The Librarian: RAG-based lookup and artifact population.
+class Phase03a_Librarian(BaseAgent):
+    """Agent 03a: RAG-based lookup and artifact population.
     
     Manages the World Bible by creating structured lore entries. 
     Ensures that new world-building details are logically consistent with existing facts.
@@ -113,68 +124,25 @@ class Librarian(BaseAgent):
         response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class Auditor(BaseAgent):
-    """The Auditor: Logic gap checker and consistency validator.
-    
-    Scans drafts for physical impossibilities, lore contradictions, 
-    and narrative logic gaps.
-    """
-    def get_system_prompt(self, registry: ProjectRegistry) -> str:
-        conflicts = "\n".join([f"- {c.description}" for c in registry.conflict_registry if not c.resolved])
-        return (
-            "You are 'The Auditor'. You check for logic gaps, physical impossibilities, and continuity errors.\n"
-            f"Known Unresolved Conflicts:\n{conflicts or 'None'}\n"
-            "Do not re-report known conflicts unless they have worsened."
-        )
 
-    def run(self, registry: ProjectRegistry, draft: str, bible_context: str) -> Dict[str, Any]:
-        """Audits a draft against the World Bible and returns a list of issues."""
-        system = self.get_system_prompt(registry)
-        user = f"World Bible Context: {bible_context}\nDraft to Audit: {draft}\n\nIdentify any NEW logic gaps or contradictions. Return JSON: {{\"issues\": [{{ \"description\": \"...\", \"severity\": \"...\" }}]}}"
-        response = self._safe_prompt(system, user)
-        if not response: return {"issues": [], "error": "Audit failed (Ollama error)"}
-        return self.client._clean_json(response)
 
-class ActionWriter(BaseAgent):
-    """Pass 1: The Skeleton - Focuses on dry action and movement."""
-    def run(self, registry: ProjectRegistry, beats: str, continuity_brief: str = "") -> str:
-        """Generates a dry, action-only draft for a scene."""
-        bible_context = self._get_world_context(registry, beats)
-        system = (
-            "You are 'Action Writer'. Write a dry, plain-language 'Pass 1' draft focusing only on character actions, movement, and plot progression. "
-            "Respect the world rules and character names provided in the context."
-        )
-        user = f"Beats: {beats}\n\nContinuity Brief: {continuity_brief}\n\n{bible_context}\n\nWrite the skeletal action for this scene."
-        return self._safe_prompt(system, user) or "Action draft failed (Ollama error)."
-
-class SensoryAgent(BaseAgent):
-    """Pass 2: The Sensory - Adds atmosphere, smell, sound, and feeling."""
+class Phase04cd_SensoryDialogue(BaseAgent):
+    """Agent 04cd: Layers sensory details and refines character dialogue."""
     def run(self, registry: ProjectRegistry, dry_draft: str) -> str:
-        """Layers sensory details onto a dry action draft."""
+        """Layers sensory details and refines dialogue within a dry draft."""
         bible_context = self._get_world_context(registry, dry_draft)
         system = (
-            "You are 'Sensory Agent'. Enforce the atmospheric rules and location details from the context. "
-            "Layer in smell, sound, texture, and feeling without changing the action."
+            "You are the 'Sensory & Dialogue Specialist'. Your job is to enrich a dry action draft.\n"
+            "1. Sensory: Enforce the atmospheric rules and location details from the context. Layer in smell, sound, texture, and feeling.\n"
+            "2. Dialogue: Refine all spoken lines. Use character profiles to ensure unique voices, accents, and jargon.\n"
+            "Maintain the core action while elevating the prose's immersive quality and vocal authenticity."
         )
-        user = f"Context: {bible_context}\n\nDry Draft: {dry_draft}\n\nLayer in sensory depth."
-        return self._safe_prompt(system, user) or "Sensory pass failed (Ollama error)."
+        user = f"Context: {bible_context}\n\nDry Draft: {dry_draft}\n\nEnrich this scene with sensory depth and unique character dialogue."
+        return self._safe_prompt(system, user) or "Sensory & Dialogue pass failed (Ollama error)."
 
-class DialogueSpecialist(BaseAgent):
-    """Pass 3: The Dialogue - Refines character voices and unique jargon."""
-    def run(self, registry: ProjectRegistry, enriched_draft: str) -> str:
-        """Refines dialogue within an enriched draft."""
-        # Query for characters mentioned in the draft
-        bible_context = self._get_world_context(registry, enriched_draft)
-        system = (
-            "You are 'Dialogue Specialist'. Refine all spoken lines. "
-            "Use the provided character profiles to ensure unique voices, accents, and jargon. "
-            "Maintain the sensory atmosphere and action of the draft."
-        )
-        user = f"Character Context: {bible_context}\n\nDraft: {enriched_draft}\n\nRefine the dialogue."
-        return self._safe_prompt(system, user) or "Dialogue pass failed (Ollama error)."
 
-class Stylist(BaseAgent):
-    """Pass 4: The Stylist - Enforces tone, voice, and specific stylistic rules.
+class Phase04e_Stylist(BaseAgent):
+    """Agent 04e: The Stylist - Enforces tone, voice, and specific stylistic rules.
     
     Uses provided sample texts and rules to ensure the final draft 
     matches the author's intended prose style.
@@ -196,39 +164,44 @@ class Stylist(BaseAgent):
         """Refines a draft to match the style profile."""
         system = self.get_system_prompt(registry)
         user = f"Draft to Refine:\n{draft}\n\nApply the style rules and voice to this draft."
-        return self.client.prompt(system, user)
+        return self._safe_prompt(system, user) or "Stylist pass failed (Ollama error)."
 
-class ShadowAgent(BaseAgent):
-    """The Shadow Agent: Tracks unspoken subtext and character knowledge states.
-    
-    Analyzes drafts to identify what characters have learned, 
-    what secrets are being kept, and the underlying thematic subtext.
-    """
+class Phase05ab_AuditShadow(BaseAgent):
+    """Agent 05ab: Performs logic audits and tracks unspoken subtext/knowledge."""
     def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        conflicts = "\n".join([f"- {c.description}" for c in registry.conflict_registry if not c.resolved])
         shadow = registry.shadow_context
         subtext_list = "\n".join([f"- {s}" for s in shadow.active_subtext]) if shadow.active_subtext else "None"
+        
         return (
-            "You are 'The Shadow Agent'. Your role is to track the unspoken layers of the story. "
-            "You monitor character knowledge, suspicions, and the underlying subtext of every scene.\n"
+            "You are the 'Audit & Shadow Agent'. You perform a dual analysis of story drafts.\n"
+            "1. Audit: Check for logic gaps, physical impossibilities, and continuity errors.\n"
+            f"Known Unresolved Conflicts:\n{conflicts or 'None'}\n"
+            "2. Shadow: Track character knowledge updates, unspoken tensions (subtext), and dramatic irony.\n"
             f"Current Active Subtext:\n{subtext_list}\n"
             "Respond in JSON format."
         )
 
     def run(self, registry: ProjectRegistry, draft: str) -> Dict[str, Any]:
-        """Analyzes a draft for subtext and knowledge updates."""
+        """Audits a draft and identifies subtext updates."""
         system = self.get_system_prompt(registry)
+        bible_context = self._get_world_context(registry, draft)
         user = (
             f"Draft to Analyze:\n{draft}\n\n"
-            "Identify:\n"
-            "1. Knowledge Updates: What did specific characters learn or begin to suspect?\n"
-            "2. Active Subtext: What are the unspoken tensions or themes in this scene?\n"
-            "3. Dramatic Irony: Is there anything the reader now knows that characters don't?\n\n"
-            "Return JSON: {\"knowledge_updates\": [{\"character\": \"...\", \"type\": \"fact/suspicion/secret\", \"content\": \"...\"}], \"subtext\": [\"...\"], \"irony\": [\"...\"]}"
+            f"World Bible Context:\n{bible_context}\n\n"
+            "Perform Audit and Shadow Analysis. Return JSON:\n"
+            "{\n"
+            "  \"issues\": [{\"description\": \"...\", \"severity\": \"low/medium/high\"}],\n"
+            "  \"knowledge_updates\": [{\"character\": \"...\", \"type\": \"fact/suspicion/secret\", \"content\": \"...\"}],\n"
+            "  \"subtext\": [\"...\"],\n"
+            "  \"irony\": [\"...\"]\n"
+            "}"
         )
-        response = self.client.prompt(system, user)
+        response = self._safe_prompt(system, user)
+        if not response: return {"issues": [], "knowledge_updates": [], "subtext": [], "irony": []}
         return self.client._clean_json(response)
 
-class SkeletonPlotter(BaseAgent):
+class Phase02a_SkeletonPlotter(BaseAgent):
     """Agent 02a: Generates a high-level 20-chapter outline."""
     def get_system_prompt(self, registry: ProjectRegistry) -> str:
         return (
@@ -253,8 +226,8 @@ class SkeletonPlotter(BaseAgent):
         response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
-class SkeletonFormatter(BaseAgent):
-    """Agent 02c: Ensures the skeleton output matches the ProjectRegistry schema."""
+class Phase02b_SkeletonFormatter(BaseAgent):
+    """Agent 02b: Ensures the skeleton output matches the ProjectRegistry schema."""
     def run(self, raw_skeleton: Dict[str, Any]) -> List[Chapter]:
         # This is a deterministic agent that cleans and maps the JSON to our Chapter model
         # though it can also use the LLM to 'fix' broken JSON if needed.
@@ -270,8 +243,8 @@ class SkeletonFormatter(BaseAgent):
                 audit_logs=[]
             ))
         return chapters
-class MarketingAgent(BaseAgent):
-    """Agent 06: Generates marketing copy, blurbs, and query letters."""
+class Phase06a_MarketingAgent(BaseAgent):
+    """Agent 06a: Generates marketing copy, blurbs, and query letters."""
     def get_system_prompt(self, registry: ProjectRegistry) -> str:
         return (
             "You are 'The Marketing Agent'. Your job is to take a completed book skeleton and prose samples "

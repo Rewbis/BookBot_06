@@ -54,12 +54,12 @@ class OllamaClient:
         return "Critical Error: Reach unreachable state in prompt()"
 
     def _strip_thoughts(self, text: str) -> str:
-        """Removes reasoning/thought blocks, ensuring everything before the closing tag is trimmed."""
-        # 1. Aggressively trim everything before the last closing tag (greedy)
-        text = re.sub(r'(?si)^.*</(?:think|thinking)>', '', text)
+        """Surgically removes reasoning/thought blocks without wiping other content."""
+        # Remove any complete <think>...</think> or <thinking>...</thinking> blocks
+        text = re.sub(r'(?si)<(think|thinking)>.*?</\1>', '', text)
         
-        # 2. Handle cases where only an opening tag exists (removes tag and everything after)
-        text = re.sub(r'(?si)<(?:think|thinking)>.*$', '', text)
+        # Also handle any trailing/unclosed tags just in case
+        text = re.sub(r'(?si)<(think|thinking)>.*$', '', text)
         
         return text.strip()
 

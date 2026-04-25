@@ -31,7 +31,7 @@ def render_phase1():
     st.divider()
     
     # 3. Structured Debate Sequence
-    st.subheader("🗣️ The Blackboard Debate")
+    st.subheader("🗣️ The Phased Debate")
     
     if not st.session_state.registry.history:
         st.info("No active debate. Enter a premise and launch the brainstorm to begin.")
@@ -42,25 +42,23 @@ def render_phase1():
         
         # Display in chronological order for the flow
         for i, msg in enumerate(history):
-            if "Architect (Initial)" in msg.sender:
+            if msg.sender == "01a_architect":
                 with st.chat_message("user", avatar="🏗️"):
-                    st.write("**Architect (Phase 1a: Expansion)**")
+                    st.write("**01a_architect (Expansion)**")
                     st.write(msg.content)
                     if st.button("Save as World Lore", key=f"save_lore_init_{i}"):
                         st.session_state.world_manager.upsert_entity(f"Concept {i}", EntityType.LORE, msg.content)
                         st.success("Added to World Bible!")
             
-            elif "Devil's Advocate" in msg.sender:
+            elif msg.sender == "01b_devils_advocate":
                 with st.chat_message("assistant", avatar="😈"):
-                    st.write("**Devil's Advocate (Phase 1b: Critique)**")
+                    st.write("**01b_devils_advocate (Critique)**")
                     st.write(msg.content)
                     if "critique" in msg.metadata:
                         st.error(f"Reasoning: {msg.metadata['critique'].get('reasoning', 'No reasoning provided.')}")
             
-            elif "Architect (Refined)" in msg.sender:
-                with st.chat_message("user", avatar="🚀"):
-                    st.write("**Architect (Phase 1c: Final Refinement)**")
-                    st.write(msg.content)
+            # Note: 01a_architect is used for both initial and refined in current history logic
+            # but we can differentiate if we want. For now, showing all 01a as expansion/refinement.
     
     st.divider()
     

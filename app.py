@@ -15,7 +15,7 @@ from src.ui.views.phase5_audit import render_phase5
 from src.ui.views.phase6_export import render_phase6
 
 # Page Config
-st.set_page_config(page_title="BookBot 06: Blackboard", layout="wide", page_icon="📖")
+st.set_page_config(page_title="BookBot 06: Narrative Engine", layout="wide", page_icon="📖")
 
 # Initialize Managers in Session State
 if "pm" not in st.session_state:
@@ -83,7 +83,7 @@ with st.sidebar:
         st.warning("⚠️ Unsaved Changes")
 
 # --- Main UI ---
-st.title("📖 BookBot 06: Blackboard Engine")
+st.title("📖 BookBot 06: Narrative Engine")
 
 tabs = st.tabs([
     "Phase 1: Brainstorming", 
