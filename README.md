@@ -1,5 +1,5 @@
 # BookBot_06
-Now with added design docs! Hopefully this will prevent drift, bloat, unintentional consequences.
+Now with added design docs! Hopefully this will prevent drift, bloat, unintentional consequences. Spoiler - it did not. Deprecated and moving on to 07
 
 ## Design Documentation
 This project follows a "Design-First" methodology to preserve architectural integrity. 
