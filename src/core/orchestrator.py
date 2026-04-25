@@ -1,7 +1,7 @@
 from typing import TypedDict, Annotated, List, Dict, Any, Optional
 from langgraph.graph import StateGraph, END
-from .state import ProjectRegistry, AgentMessage, EntityType, KnowledgeState, Chapter
-from .agents import Architect, DevilsAdvocate, Librarian, Auditor, ActionWriter, SensoryAgent, DialogueSpecialist, Stylist, ShadowAgent, ContinuityExpert, SkeletonPlotter, SkeletonFormatter
+from .state import ProjectRegistry, AgentMessage, EntityType, KnowledgeState, Chapter, Conflict
+from .agents import Architect, DevilsAdvocate, Librarian, Auditor, ActionWriter, SensoryAgent, DialogueSpecialist, Stylist, ShadowAgent, ContinuityExpert, SkeletonPlotter, SkeletonFormatter, MarketingAgent
 from .llm_client import OllamaClient
 from .world_bible import WorldBibleManager
 from langgraph.graph import START
@@ -17,7 +17,13 @@ class GraphState(TypedDict):
     client: Optional[OllamaClient]
 
 def brainstorm_node(state: GraphState) -> GraphState:
-    """Expansion phase with Devil's Advocate intervention."""
+    """Expansion phase with Devil's Advocate intervention.
+    
+    Sequence:
+    1. Architect generates initial expansion.
+    2. Devil's Advocate critiques and suggests a pivot.
+    3. Architect incorporates critique for a final refined vision.
+    """
     client = state.get('client') or OllamaClient()
     arch = Architect(client)
     da = DevilsAdvocate(client)
@@ -25,18 +31,30 @@ def brainstorm_node(state: GraphState) -> GraphState:
     # Use prompt from input_data if available, else default
     prompt = (state.get('input_data') or {}).get('prompt', "Expand on the current premise and suggest new directions.")
     
-    # 1. Generate expansion
-    res = arch.run(state['registry'], prompt)
+    # 1. Initial Expansion (Architect)
+    res1 = arch.run(state['registry'], prompt)
+    plan1 = str(res1.get('plan', 'No plan generated.'))
     
-    # 2. Challenge with Devil's Advocate
-    plan_str = str(res.get('plan', ''))
-    critique = da.run(state['registry'], plan_str)
+    # 2. Challenge (Devil's Advocate)
+    critique = da.run(state['registry'], plan1)
+    pivot = str(critique.get('pivot_suggestion', 'No pivot suggested.'))
     
-    # Update History (Agent Debate)
-    state['registry'].history.append(AgentMessage(sender="Architect", content=plan_str))
-    state['registry'].history.append(AgentMessage(sender="Devil's Advocate", content=str(critique.get('pivot_suggestion', ''))))
+    # 3. Final Refinement (Architect)
+    refine_prompt = f"Original Plan: {plan1}\n\nCritique: {pivot}\n\nIncorporate this critique and provide a FINAL, hardened version of the vision."
+    res2 = arch.run(state['registry'], refine_prompt)
+    plan2 = str(res2.get('plan', 'No refined plan generated.'))
     
-    state['last_agent_output'] = critique
+    # Update History and Registry
+    state['registry'].final_vision = plan2
+    state['registry'].history.append(AgentMessage(sender="Architect (Initial)", content=plan1))
+    state['registry'].history.append(AgentMessage(sender="Devil's Advocate", content=pivot, metadata=critique))
+    state['registry'].history.append(AgentMessage(sender="Architect (Refined)", content=plan2))
+    
+    state['last_agent_output'] = {
+        "initial": plan1,
+        "critique": critique,
+        "final": plan2
+    }
     return state
 
 def librarian_node(state: GraphState) -> GraphState:
@@ -147,15 +165,29 @@ def multi_pass_draft_node(state: GraphState) -> GraphState:
     # Update registry with draft
     if chapter_index >= 0 and chapter_index < len(state['registry'].chapters):
         state['registry'].chapters[chapter_index].content = p4
-        state['registry'].chapters[chapter_index].audit_logs = audit_res.get('issues', [])
+        issues = audit_res.get('issues', [])
+        state['registry'].chapters[chapter_index].audit_logs = issues
+        
+        # Also populate the global conflict registry
+        for issue in issues:
+            state['registry'].conflict_registry.append(Conflict(
+                description=issue.get('description', ''),
+                severity=issue.get('severity', 'medium')
+            ))
     else:
         # Fallback to appending if index is invalid
+        issues = audit_res.get('issues', [])
         state['registry'].chapters.append(Chapter(
             chapter_number=len(state['registry'].chapters) + 1,
             title=f"New Chapter {len(state['registry'].chapters) + 1}",
             content=p4,
-            audit_logs=audit_res.get('issues', [])
+            audit_logs=issues
         ))
+        for issue in issues:
+            state['registry'].conflict_registry.append(Conflict(
+                description=issue.get('description', ''),
+                severity=issue.get('severity', 'medium')
+            ))
     
     state['last_agent_output'] = {
         "final_draft": p4, 
@@ -164,6 +196,17 @@ def multi_pass_draft_node(state: GraphState) -> GraphState:
         "continuity": continuity_brief
     }
     return state
+def marketing_node(state: GraphState) -> GraphState:
+    """Generates marketing copy for the project."""
+    client = state.get('client') or OllamaClient()
+    marketer = MarketingAgent(client)
+    
+    task = (state.get('input_data') or {}).get('task', "Write a back-cover blurb.")
+    res = marketer.run(state['registry'], task)
+    
+    state['last_agent_output'] = {"marketing_copy": res}
+    return state
+
 
 def router(state: GraphState):
     """Routes to the correct node based on the command."""
@@ -176,6 +219,8 @@ def router(state: GraphState):
         return "librarian"
     elif cmd == "plot_skeleton":
         return "plot_skeleton"
+    elif cmd == "marketing":
+        return "marketing"
     return "error"
 
 def error_node(state: GraphState) -> GraphState:
@@ -191,6 +236,7 @@ def create_blackboard_graph():
     workflow.add_node("draft", multi_pass_draft_node)
     workflow.add_node("librarian", librarian_node)
     workflow.add_node("plot_skeleton", plot_skeleton_node)
+    workflow.add_node("marketing", marketing_node)
     workflow.add_node("error", error_node)
     
     # Set entry point to a routing logic
@@ -200,6 +246,7 @@ def create_blackboard_graph():
     workflow.add_edge("draft", END)
     workflow.add_edge("librarian", END)
     workflow.add_edge("plot_skeleton", END)
+    workflow.add_edge("marketing", END)
     workflow.add_edge("error", END)
     
     return workflow.compile()

@@ -88,6 +88,9 @@ class ProjectRegistry(BaseModel):
     tone: str = "Neutral"
     voice: str = ""
     north_star: str = "" # The intended ending or theme
+    final_vision: str = "" # The refined output of Phase 1
+    target_chapters: int = 20
+    target_word_count: int = 50000
     
     # Style & Voice
     style_profile: StyleProfile = Field(default_factory=StyleProfile)

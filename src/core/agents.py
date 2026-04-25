@@ -1,6 +1,6 @@
 from typing import Dict, Any, List, Optional
 from .llm_client import OllamaClient
-from .state import ProjectRegistry, AgentMessage
+from .state import ProjectRegistry, AgentMessage, Chapter
 
 class BaseAgent:
     def __init__(self, client: OllamaClient):
@@ -239,7 +239,17 @@ class SkeletonPlotter(BaseAgent):
 
     def run(self, registry: ProjectRegistry) -> Dict[str, Any]:
         system = self.get_system_prompt(registry)
-        user = f"Premise: {registry.premise}\nNorth Star: {registry.north_star}\n\nGenerate a 20-chapter outline. Return JSON with a list of chapters, each containing 'number', 'title', and 'summary'."
+        # Use final_vision if Phase 1 has been run, otherwise fallback to premise
+        vision = registry.final_vision if registry.final_vision else registry.premise
+        
+        user = (
+            f"Final Vision / Premise: {vision}\n"
+            f"North Star: {registry.north_star}\n"
+            f"Target Chapter Count: {registry.target_chapters}\n"
+            f"Total Target Word Count: {registry.target_word_count}\n\n"
+            f"Generate a {registry.target_chapters}-chapter outline. Ensure the pacing matches the word count goal. "
+            "Return JSON with a list of chapters, each containing 'number', 'title', and 'summary'."
+        )
         response = self.client.prompt(system, user)
         return self.client._clean_json(response)
 
@@ -248,7 +258,6 @@ class SkeletonFormatter(BaseAgent):
     def run(self, raw_skeleton: Dict[str, Any]) -> List[Chapter]:
         # This is a deterministic agent that cleans and maps the JSON to our Chapter model
         # though it can also use the LLM to 'fix' broken JSON if needed.
-        from .state import Chapter
         chapters = []
         raw_list = raw_skeleton.get('chapters', [])
         
@@ -261,3 +270,20 @@ class SkeletonFormatter(BaseAgent):
                 audit_logs=[]
             ))
         return chapters
+class MarketingAgent(BaseAgent):
+    """Agent 06: Generates marketing copy, blurbs, and query letters."""
+    def get_system_prompt(self, registry: ProjectRegistry) -> str:
+        return (
+            "You are 'The Marketing Agent'. Your job is to take a completed book skeleton and prose samples "
+            "to generate high-impact marketing copy. This includes back-cover blurbs, social media teasers, "
+            "and formal query letters for agents/publishers."
+        )
+
+    def run(self, registry: ProjectRegistry, task: str) -> str:
+        system = self.get_system_prompt(registry)
+        context = f"Title: {registry.title}\nPremise: {registry.premise}\nNorth Star: {registry.north_star}\n"
+        if registry.chapters:
+            context += f"Chapter 1 Summary: {registry.chapters[0].summary}\n"
+        
+        user = f"Context: {context}\nTask: {task}\n\nGenerate the requested marketing content."
+        return self._safe_prompt(system, user) or "Marketing generation failed (Ollama error)."

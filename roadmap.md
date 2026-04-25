@@ -17,10 +17,6 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 
 ## Backlog (Prioritized)
 
-### 1. Blackboard Foundation [Must Have]
-- **Task**: Overhaul `state.py` to support World Bible, Conflict Registry, and Tension Graph.
-- **Task**: Implement `ProjectManager` for full-project snapshots (Save/Load).
-- **UI**: Integrate project selector and snapshot controls into sidebar.
 
 ### 2. The Lore Engine & Adversaries [Must Have]
 - **Task**: Implement Agent 01c (Devil's Advocate) to challenge clichés in Phase 1.
@@ -36,6 +32,19 @@ This document tracks the evolution of the BookBot Narrative Engine, bridging the
 ---
 
 ## Completed (Changelog)
+
+### 6-Phase UI Sync & Export Engine
+- **UI**: Restructured the entire dashboard into a strict 6-phase lifecycle (Brainstorming -> Structuring -> World Building -> Drafting -> Audit -> Export).
+- **Task**: Implemented Agent 06 (Marketing Agent) for Phase 6 copy generation.
+- **Task**: Plumbed Phase 6 into the LangGraph orchestrator.
+- **UI**: Integrated Markdown Export utility for final manuscripts.
+- **Date completed**: 2026-04-23.
+
+### Blackboard Foundation
+- **Task**: Overhauled `state.py` to support World Bible, Conflict Registry, and Tension Graph.
+- **Task**: Implemented `ProjectManager` for full-project snapshots (Save/Load).
+- **UI**: Integrated project selector and snapshot controls into sidebar.
+- **Date completed**: 2026-04-23.
 
 ### Phase 1 & 2 Foundations
 - **Task**: Established Pydantic Registry for state management.

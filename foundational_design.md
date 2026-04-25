@@ -8,6 +8,7 @@ BookBot_06 is an agentic creative writing partner designed to evolve raw concept
 ## 2. Scope Boundaries (MoSCoW)
 
 ### Must Have
+- 6 phases of writing. Planning, Outline, Beats, Drafting, Revision, Publication. each with ai agents dedicated to it's completion, assisting the human user and working together to create the best possible book.
 - **Blackboard Architecture**: A central "World State" (The Bible) that agents watch and update to ensure consistency.
 - **Lore Engine (RAG)**: Proactive retrieval-augmented generation to prevent "continuity drift".
 - **Continuity Expert**: Dedicated validator (Phase 4, Pass 0) that ensures scene beats align with established lore before drafting begins.
